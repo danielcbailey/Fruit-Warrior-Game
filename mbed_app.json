@@ -1,0 +1,16 @@
+{
+    "requires": ["bare-metal",
+                 "events",
+                 "system-storage", 
+                 "blockdevice", 
+                 "filesystem", 
+                 "littlefs",
+                 "littlefs2",
+                 "fat_chan"],
+    "target_overrides": {
+        "*": {
+            "target.printf_lib": "std",
+            "target.c_lib": "std"
+        }
+    }
+}
