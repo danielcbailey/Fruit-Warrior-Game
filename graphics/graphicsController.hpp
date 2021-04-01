@@ -5,6 +5,7 @@
 
 #include "uLCD.hpp"
 #include "graphicsElement.hpp"
+#include "animationPlayer.hpp"
 #include <list>
 
 class GraphicsController; //forward declaration
@@ -18,6 +19,8 @@ class GraphicsController {
     //head is lower layer, tail is top layer of overall list
     //head is first to draw in a layer, tail is the last element to draw in inner list
     std::list<std::list<GraphicsElement*>> elements;
+
+    std::list<AnimationPlayer*> animations;
 
     //used for rendering new placement of element
     void renderAllAbove(GraphicsElement* element, bool add);
@@ -52,11 +55,21 @@ class GraphicsController {
     void removeGraphicsElement(GraphicsElement* element);
 
     /*
-     * Replaces one graphical element for another. This is intended to be used for animations
-     * to reduce the overhead of constantly removing and adding, instead it just pushes the
-     * changes from the animation.
+     * Registers an animation for the graphics controller to update
+     * Automatically updates the frames and renders them to the screen
      */
-    void replaceGraphicsElement(GraphicsElement* oldElem, GraphicsElement* newElem);
+    void registerAnimation(AnimationPlayer* player);
+
+    /*
+     * Removes a registered animation from the graphics controller's management
+     * This must be called prior to deleting an element.
+     */
+    void removeAnimation(AnimationPlayer* player);
+
+    /*
+     * Processes all animations registered with the graphics controller
+     */
+    void handleGraphicsTick(float dt);
 };
 
 #endif //GRAPHICS_CONTROLLER_INCLUDED

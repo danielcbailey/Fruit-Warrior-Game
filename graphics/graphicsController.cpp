@@ -289,3 +289,33 @@ void GraphicsController::removeGraphicsElement(GraphicsElement *element) {
         ++it;
     }
 }
+
+void GraphicsController::registerAnimation(AnimationPlayer* player) {
+    this->animations.push_back(player);
+}
+
+void GraphicsController::removeAnimation(AnimationPlayer* player) {
+    this->animations.remove(player);
+}
+
+void GraphicsController::handleGraphicsTick(float dt) {
+    for (std::list<AnimationPlayer*>::iterator it = this->animations.begin(); it != this->animations.end(); ++it) {
+        BitmapImage* frame = (*it)->getFrame(dt);
+        GraphicsElement* elem = (*it)->getElement();
+
+        if (elem->getType() != GraphicsElement::ElementType::ELEMENT_IMAGE) {
+            //shouldn't happen, but just in case
+            continue;
+        }
+
+        if (elem->getContext()->Image.image == frame) {
+            //no change, so can just skip
+            continue;
+        }
+
+        //A change occured, must update the element then have the controller handle the update
+        elem->getContext()->Image.image = frame;
+
+        this->updateGraphicsElement(elem);
+    }
+}
