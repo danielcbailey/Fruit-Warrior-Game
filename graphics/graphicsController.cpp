@@ -316,6 +316,10 @@ void GraphicsController::handleGraphicsTick(float dt) {
         //A change occured, must update the element then have the controller handle the update
         elem->getContext()->Image.image = frame;
 
+        //updating context size
+        elem->getContext()->Image.width = frame->getWidth();
+        elem->getContext()->Image.height = frame->getHeight();
+
         this->updateGraphicsElement(elem);
     }
 }

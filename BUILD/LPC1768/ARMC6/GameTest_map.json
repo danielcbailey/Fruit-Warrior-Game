@@ -2,7 +2,7 @@
     {
         "module": "[lib]\\c_w.l",
         "size": {
-            ".text": 10353,
+            ".text": 10459,
             ".data": 12,
             ".bss": 280,
             ".text-delta": 0,
@@ -13,7 +13,18 @@
     {
         "module": "[lib]\\fz_ws.l",
         "size": {
-            ".text": 8,
+            ".text": 1726,
+            ".data": 0,
+            ".bss": 0,
+            ".text-delta": 0,
+            ".data-delta": 0,
+            ".bss-delta": 0
+        }
+    },
+    {
+        "module": "[lib]\\libcppabi_w.l",
+        "size": {
+            ".text": 44,
             ".data": 0,
             ".bss": 0,
             ".text-delta": 0,
@@ -24,7 +35,7 @@
     {
         "module": "[lib]\\m_ws.l",
         "size": {
-            ".text": 40,
+            ".text": 1266,
             ".data": 0,
             ".bss": 0,
             ".text-delta": 0,
@@ -44,12 +55,34 @@
         }
     },
     {
+        "module": "assets\\animationAssets.o",
+        "size": {
+            ".text": 0,
+            ".data": 24,
+            ".bss": 0,
+            ".text-delta": 0,
+            ".data-delta": 0,
+            ".bss-delta": 0
+        }
+    },
+    {
         "module": "assets\\backgrounds.o",
         "size": {
             ".text": 32768,
             ".data": 20,
             ".bss": 0,
             ".text-delta": 0,
+            ".data-delta": 0,
+            ".bss-delta": 0
+        }
+    },
+    {
+        "module": "assets\\bomb.o",
+        "size": {
+            ".text": 512,
+            ".data": 84,
+            ".bss": 0,
+            ".text-delta": 2,
             ".data-delta": 0,
             ".bss-delta": 0
         }
@@ -66,10 +99,43 @@
         }
     },
     {
+        "module": "game\\sprites",
+        "size": {
+            ".text": 168,
+            ".data": 0,
+            ".bss": 0,
+            ".text-delta": 0,
+            ".data-delta": 0,
+            ".bss-delta": 0
+        }
+    },
+    {
+        "module": "graphics\\animationPlayer.o",
+        "size": {
+            ".text": 146,
+            ".data": 0,
+            ".bss": 0,
+            ".text-delta": 0,
+            ".data-delta": 0,
+            ".bss-delta": 0
+        }
+    },
+    {
         "module": "graphics\\bitmapImage.o",
         "size": {
-            ".text": 252,
+            ".text": 248,
             ".data": 0,
+            ".bss": 0,
+            ".text-delta": 0,
+            ".data-delta": 0,
+            ".bss-delta": 0
+        }
+    },
+    {
+        "module": "graphics\\gameTick.o",
+        "size": {
+            ".text": 48,
+            ".data": 12,
             ".bss": 0,
             ".text-delta": 0,
             ".data-delta": 0,
@@ -79,7 +145,7 @@
     {
         "module": "graphics\\graphicsController.o",
         "size": {
-            ".text": 1570,
+            ".text": 1972,
             ".data": 0,
             ".bss": 4,
             ".text-delta": 0,
@@ -92,6 +158,17 @@
         "size": {
             ".text": 628,
             ".data": 0,
+            ".bss": 0,
+            ".text-delta": 0,
+            ".data-delta": 0,
+            ".bss-delta": 0
+        }
+    },
+    {
+        "module": "graphics\\sprite.o",
+        "size": {
+            ".text": 309,
+            ".data": 24,
             ".bss": 0,
             ".text-delta": 0,
             ".data-delta": 0,
@@ -112,7 +189,7 @@
     {
         "module": "main.o",
         "size": {
-            ".text": 340,
+            ".text": 372,
             ".data": 0,
             ".bss": 108,
             ".text-delta": 0,
@@ -166,10 +243,10 @@
     },
     {
         "summary": {
-            "static_ram": 5224,
+            "static_ram": 5368,
             "static_ram_delta": 0,
-            "total_flash": 56434,
-            "total_flash_delta": 0
+            "total_flash": 61285,
+            "total_flash_delta": 2
         }
     }
 ]

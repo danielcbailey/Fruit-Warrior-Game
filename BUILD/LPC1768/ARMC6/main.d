@@ -149,4 +149,6 @@ BUILD\LPC1768\ARMC6\main.o: main.cpp BUILD\LPC1768\ARMC6\mbed_config.h \
   mbed-os\platform\include\platform\Stream.h \
   mbed-os\platform\include\platform\FileLike.h graphics\bitmapImage.hpp \
   graphics\colorLUT.hpp graphics\uLCD.hpp graphics\graphicsElement.hpp \
-  graphics\graphicsController.hpp assets\assets.hpp globals.hpp
+  graphics\graphicsController.hpp graphics\animationPlayer.hpp \
+  graphics\animation.hpp assets\assets.hpp globals.hpp \
+  game\sprites\bomb.hpp graphics\sprite.hpp graphics\gameTick.hpp

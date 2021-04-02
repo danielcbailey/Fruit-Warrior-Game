@@ -52,7 +52,7 @@ class Sprite : GraphicsElement {
 
     //to be implemented by the class that implements Sprite.
     //called on every game tick with the time delta passed to the function
-    void onGameTick(float dt);
+    virtual void onGameTick(float dt) = 0;
 };
 
 #endif //SPRITE_INCLUDED

@@ -2,7 +2,11 @@
  * The header file for all assets
  */
 
+#ifndef ASSETS_INCLUDED
+#define ASSETS_INCLUDED
+
 #include "graphics/bitmapImage.hpp"
+#include "graphics/animation.hpp"
 
 //fruits
 
@@ -44,3 +48,14 @@ extern BitmapImage knife_7;
 
 //backgrounds
 extern BitmapImage backgroundGame_0;
+
+//bomb
+extern BitmapImage bomb_0;
+extern BitmapImage bomb_1;
+extern BitmapImage bomb_2;
+extern BitmapImage bomb_3;
+
+//Animations
+extern Animation bomb_animation;
+
+#endif //ASSETS_INCLUDED

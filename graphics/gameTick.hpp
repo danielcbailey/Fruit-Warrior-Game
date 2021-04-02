@@ -18,8 +18,6 @@ class GameTickManager {
 
     public:
 
-    GameTickManager();
-
     void dispatchGameTick(float dt);
 
     inline void registerForTick(Sprite* sprite) { this->registrations.push_back(sprite); }

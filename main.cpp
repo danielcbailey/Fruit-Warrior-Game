@@ -4,6 +4,8 @@
 #include "graphics/graphicsController.hpp"
 #include "assets/assets.hpp"
 #include "globals.hpp"
+#include "game/sprites/bomb.hpp"
+#include "graphics/gameTick.hpp"
 
 UnbufferedSerial pc(USBTX, USBRX, 9600);
 
@@ -54,6 +56,8 @@ int main() {
 
     DigitalOut led(P1_23);
 
+    Bomb testBomb;
+
     int direction = 1;
     int pos = 20;
     int count = 0;
@@ -73,6 +77,7 @@ int main() {
         controller.updateGraphicsElement(&testElement);
 
         wait_us(100000);
+        _tickManager.dispatchGameTick(0.1f);
         count++;
     }
 }

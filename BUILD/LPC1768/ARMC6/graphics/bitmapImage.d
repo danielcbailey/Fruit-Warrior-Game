@@ -150,4 +150,5 @@ BUILD\LPC1768\ARMC6\graphics\bitmapImage.o: graphics\bitmapImage.cpp \
   mbed-os\platform\include\platform\Stream.h \
   mbed-os\platform\include\platform\FileLike.h graphics\colorLUT.hpp \
   graphics\uLCD.hpp graphics\graphicsElement.hpp \
-  graphics\graphicsController.hpp
+  graphics\graphicsController.hpp graphics\animationPlayer.hpp \
+  graphics\animation.hpp
