@@ -3,6 +3,17 @@
 #include "graphicsElement.hpp"
 #include "bitmapImage.hpp"
 
+GraphicsElement::GraphicsElement(BitmapImage* image, int x, int y) {
+    this->context = {};
+    this->context.Image.image = image;
+    this->context.Image.height = image->getHeight();
+    this->context.Image.width = image->getWidth();
+    this->context.Image.x = x;
+    this->context.Image.y = y;
+
+    this->elementType = ELEMENT_IMAGE;
+}
+
 bool GraphicsElement::sample(int x, int y, uint16_t *color) {
     switch (this->elementType) {
         case ELEMENT_NONE:

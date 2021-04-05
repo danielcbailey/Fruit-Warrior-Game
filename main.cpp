@@ -7,14 +7,28 @@
 #include "game/sprites/bomb.hpp"
 #include "graphics/gameTick.hpp"
 
+#include "core/screenManager.hpp"
+#include "screens/titleScreen.hpp"
+
 UnbufferedSerial pc(USBTX, USBRX, 9600);
 
+//ScreenManager _screenManager(&_titleScreen);
+
+//Testing:
+#include "screens/gamePlayScreen.hpp"
+
+ScreenManager _screenManager(&_gamePlayScreen);
+//End testing
+
 int main() {
-    //printf("%d\n", (int)uLCD::BAUD_1500000);
+    //Initializing the graphics
 
     uLCD lcd(P0_15, P0_16, p25, uLCD::BAUD_1500000);
 
     GraphicsController controller(&lcd);
+
+    //Starting the game
+    _screenManager.gameStart();
 
     GraphicsElement::ElementContext context;
     context.Image.layer = 5;

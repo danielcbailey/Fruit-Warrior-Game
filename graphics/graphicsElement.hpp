@@ -73,6 +73,8 @@ class GraphicsElement {
 
     inline GraphicsElement(ElementType eType, ElementContext context) : context(context), elementType(eType), renderedROI({0,0,0,0}) {}
 
+    GraphicsElement(BitmapImage* image, int x, int y);
+
     inline ElementContext* getContext() { return &this->context; }
 
     inline ElementType getType() { return this->elementType; }

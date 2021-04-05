@@ -2,6 +2,8 @@
 
 #include "fruitManager.hpp"
 #include "graphics/gameTick.hpp"
+#include "core/screenManager.hpp"
+#include "screens/gameOverScreen.hpp"
 
 FruitManager::FruitManager() {
     this->knifeX = 0;
@@ -12,6 +14,15 @@ FruitManager::FruitManager() {
 
 FruitManager::~FruitManager() {
     _tickManager.removeRegistration(this);
+
+    //Deleting all created fruit/bombs
+    for (std::list<Sliceable*>::iterator it = this->fruits.begin(); it != this->fruits.end(); ++it) {
+        delete(*it);
+    }
+
+    for (std::list<Bomb*>::iterator it = this->bombs.begin(); it != this->bombs.end(); ++it) {
+        delete(*it);
+    }
 }
 
 void FruitManager::onGameTick(float dt) {
@@ -49,7 +60,10 @@ void FruitManager::onGameTick(float dt) {
     while (bIt != this->bombs.end()) {
         if ((*it)->isInROI(knifeROI)) {
             //well, game over I guess
-            //TODO: switch screens
+            _screenManager.changeScreen(&_gameOverScreen);
         }
     }
+
+    //now new fruit are generated
+
 }
