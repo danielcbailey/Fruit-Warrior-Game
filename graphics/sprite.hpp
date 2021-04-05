@@ -13,8 +13,9 @@
 
 #include "graphicsElement.hpp"
 #include "animationPlayer.hpp"
+#include "tickable.hpp"
 
-class Sprite : GraphicsElement {
+class Sprite : public GraphicsElement, public Tickable {
     private:
     
     bool registered;
@@ -49,10 +50,6 @@ class Sprite : GraphicsElement {
 
     //if already registered, needs to unregister the element and register it for layer changes to take effect
     void setLayer(int layer);
-
-    //to be implemented by the class that implements Sprite.
-    //called on every game tick with the time delta passed to the function
-    virtual void onGameTick(float dt) = 0;
 };
 
 #endif //SPRITE_INCLUDED

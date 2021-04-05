@@ -1,0 +1,41 @@
+
+
+#ifndef SLICEABLE_INCLUDED
+#define SLICEABLE_INCLUDED
+
+#include "graphics/sprite.hpp"
+
+class Sliceable : public Sprite {
+    private:
+
+    float bearing; //in radians
+    float vel; //in pixels per second
+    float removeCounter;
+
+    int points;
+    bool isCut;
+    bool removable;
+
+    public:
+
+    Sliceable(float bearing, float vel, int points, int x0, int y0,
+              Animation* cutAnimation, BitmapImage* image);
+
+    inline int getPoints() { return this->points; }
+
+    inline float getBearing() { return this->bearing; }
+
+    inline float getVelocity() { return this->vel; }
+
+    inline void cut() {
+        if (this->isCut) return;
+        this->isCut = true;
+        this->enableAnimation();
+    }
+
+    inline bool shouldRemove() { return this->removable; }
+
+    void onGameTick(float dt);
+};
+
+#endif //SLICEABLE_INCLUDED

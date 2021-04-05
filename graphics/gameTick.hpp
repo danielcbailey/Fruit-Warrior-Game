@@ -10,19 +10,19 @@
 
 #include <list>
 
-class Sprite;
+class Tickable;
 
 class GameTickManager {
 
-    std::list<Sprite*> registrations;
+    std::list<Tickable*> registrations;
 
     public:
 
     void dispatchGameTick(float dt);
 
-    inline void registerForTick(Sprite* sprite) { this->registrations.push_back(sprite); }
+    inline void registerForTick(Tickable* obj) { this->registrations.push_back(obj); }
 
-    inline void removeRegistration(Sprite* sprite) { this->registrations.remove(sprite); }
+    inline void removeRegistration(Tickable* obj) { this->registrations.remove(obj); }
 };
 
 extern GameTickManager _tickManager;

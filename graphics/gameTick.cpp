@@ -1,13 +1,13 @@
 
 
 #include "gameTick.hpp"
-#include "sprite.hpp"
+#include "tickable.hpp"
 #include "graphicsController.hpp"
 
 GameTickManager _tickManager;
 
 void GameTickManager::dispatchGameTick(float dt) {
-    for (std::list<Sprite*>::iterator it = this->registrations.begin(); it != this->registrations.end(); ++it) {
+    for (std::list<Tickable*>::iterator it = this->registrations.begin(); it != this->registrations.end(); ++it) {
         (*it)->onGameTick(dt);
     }
 

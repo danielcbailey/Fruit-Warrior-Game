@@ -1,2 +1,0 @@
-C:\Users\dcoop\source\repos\uLCDEmulator\Debug\uLCDEmulator.exe
-C:\Users\dcoop\source\repos\uLCDEmulator\Debug\uLCDEmulator.pdb
