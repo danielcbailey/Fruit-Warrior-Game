@@ -28,8 +28,6 @@ class GraphicsController {
     //used for restoring a place that an element used to occupy
     void renderAllIn(GraphicsElement::RegionOfInfluence roi);
 
-    GraphicsElement* resampleImage(GraphicsElement::RegionOfInfluence roi, GraphicsElement* img);
-
     public:
 
     inline GraphicsController(uLCD* lcd) : lcd(lcd) { _globalGraphics = this; }
@@ -70,6 +68,8 @@ class GraphicsController {
      * Processes all animations registered with the graphics controller
      */
     void handleGraphicsTick(float dt);
+
+    inline uLCD* getLCD() { return this->lcd; }
 };
 
 #endif //GRAPHICS_CONTROLLER_INCLUDED

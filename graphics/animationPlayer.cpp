@@ -17,6 +17,7 @@ BitmapImage* AnimationPlayer::getFrame(float dt) {
     case PLAYBACK_ONCE_SINGLE_WAY:
         if (frameCounter >= this->currentAnimation->getFrameCount()) {
             //animation finished already
+            this->done = true;
             ret = this->currentAnimation->getFrame(this->currentAnimation->getFrameCount() - 1);
         } else {
             ret = this->currentAnimation->getFrame(frameCounter);
@@ -29,6 +30,7 @@ BitmapImage* AnimationPlayer::getFrame(float dt) {
             //suppose an animation consists of a, b, c, and d. That is 4 frames.
             //it is played: a, b, c, d, c, b, a which is 7 frames, or 2 * n - 1
 
+            this->done = true;
             ret = this->currentAnimation->getFrame(0);
         } else if (frameCounter >= this->currentAnimation->getFrameCount()) {
             //reverse direction

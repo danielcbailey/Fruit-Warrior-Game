@@ -3,6 +3,7 @@
 #include "sprite.hpp"
 #include "graphicsController.hpp"
 #include "gameTick.hpp"
+#include "globals.hpp"
 
 //Placeholder image
 const uint16_t placeholderImg_lut_buf[] = {0};
@@ -16,6 +17,8 @@ Sprite::Sprite() :
     this->registered = false;
     this->animationRegistered = false;
     this->hidden = false;
+    this->x = 0;
+    this->y = 0;
 
     //registering for gametick updates
     _tickManager.registerForTick(this);
@@ -34,9 +37,11 @@ Sprite::~Sprite() {
     }
 }
 
-void Sprite::setPos(int x, int y) {
+void Sprite::setPos(float x, float y) {
     this->getContext()->Image.x = x;
     this->getContext()->Image.y = y;
+    this->x = x;
+    this->y = y;
 
     if (!this->registered || this->hidden) {
         return;
@@ -45,12 +50,12 @@ void Sprite::setPos(int x, int y) {
     _globalGraphics->updateGraphicsElement(this);
 }
 
-int Sprite::getX() {
-    return this->getContext()->Image.x;
+float Sprite::getX() {
+    return this->x;
 }
 
-int Sprite::getY() {
-    return this->getContext()->Image.y;
+float Sprite::getY() {
+    return this->y;
 }
 
 void Sprite::setImage(BitmapImage* image) {

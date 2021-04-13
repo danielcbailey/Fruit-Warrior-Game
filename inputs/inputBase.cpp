@@ -9,14 +9,12 @@
 
 #include "inputBase.hpp"
 #include "inputArbiter.hpp"
+#include "globals.hpp"
+#include <functional>
 
-int InputBase::attach(inputCallback callback, void *context) {
-    inputCallback finalCallback = callback;
-    if (context != nullptr) {
-        finalCallback = std::bind(callback, context);
-    }
+int InputBase::attach(inputCallback callback) {
     
-    return this->stackPush(finalCallback);
+    return this->stackPush(callback);
 }
 
 int InputBase::stackPush(inputCallback cb) {

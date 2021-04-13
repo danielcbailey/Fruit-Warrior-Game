@@ -1,7 +1,8 @@
 BUILD\LPC1768\ARMC6\graphics\gameTick.o: graphics\gameTick.cpp \
   BUILD\LPC1768\ARMC6\mbed_config.h graphics\gameTick.hpp \
-  graphics\sprite.hpp graphics\graphicsElement.hpp graphics\uLCD.hpp \
-  mbed-os\mbed.h mbed-os\platform\include\platform\mbed_version.h \
+  graphics\tickable.hpp graphics\graphicsController.hpp \
+  graphics\uLCD.hpp mbed-os\mbed.h \
+  mbed-os\platform\include\platform\mbed_version.h \
   mbed-os\rtos\include\rtos\rtos.h \
   mbed-os\rtos\include\rtos\internal\mbed_rtos_storage.h \
   mbed-os\rtos\include\rtos\Kernel.h \
@@ -150,6 +151,6 @@ BUILD\LPC1768\ARMC6\graphics\gameTick.o: graphics\gameTick.cpp \
   mbed-os\platform\include\platform\mbed_stats.h \
   mbed-os\platform\include\platform\Stream.h \
   mbed-os\platform\include\platform\FileLike.h \
-  graphics\animationPlayer.hpp graphics\animation.hpp \
-  graphics\bitmapImage.hpp graphics\colorLUT.hpp \
-  graphics\graphicsController.hpp
+  graphics\graphicsElement.hpp graphics\animationPlayer.hpp \
+  graphics\animation.hpp graphics\bitmapImage.hpp graphics\colorLUT.hpp \
+  globals.hpp

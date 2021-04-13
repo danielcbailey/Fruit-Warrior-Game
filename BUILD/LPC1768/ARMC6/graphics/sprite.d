@@ -151,5 +151,5 @@ BUILD\LPC1768\ARMC6\graphics\sprite.o: graphics\sprite.cpp \
   mbed-os\platform\include\platform\Stream.h \
   mbed-os\platform\include\platform\FileLike.h \
   graphics\animationPlayer.hpp graphics\animation.hpp \
-  graphics\bitmapImage.hpp graphics\colorLUT.hpp \
-  graphics\graphicsController.hpp graphics\gameTick.hpp
+  graphics\bitmapImage.hpp graphics\colorLUT.hpp graphics\tickable.hpp \
+  graphics\graphicsController.hpp graphics\gameTick.hpp globals.hpp

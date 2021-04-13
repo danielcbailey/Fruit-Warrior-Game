@@ -95,6 +95,12 @@ class GraphicsElement {
     inline void setRenderedROI(RegionOfInfluence roi) { this->renderedROI = roi; }
 
     inline RegionOfInfluence getRenderedROI() { return this->renderedROI; }
+
+    static bool ROIEquals(RegionOfInfluence r1, RegionOfInfluence r2);
+
+    static RegionOfInfluence adjustROIToScreen(RegionOfInfluence roi, bool* isValid);
+
+    static GraphicsElement* resampleImage(GraphicsElement::RegionOfInfluence roi, GraphicsElement* img);
 };
 
 #endif //GRAPHICS_ELEMENT_INCLUDED

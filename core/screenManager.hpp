@@ -26,7 +26,6 @@ class ScreenManager {
     float frameTimes[5];
 
     Timer timer;
-    InputArbiter inputArbiter;
 
     //Calculated as a rolling average of the last 5 frames.
     float fps;

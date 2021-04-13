@@ -27,6 +27,7 @@ void GraphicsController::renderAllAbove(GraphicsElement* element, bool add) {
     while (it != this->elements.end()) {
         std::list<GraphicsElement*> layer = *it;
         if (layer.size() == 0) {
+            ++it;
             continue;
         }
 
@@ -91,7 +92,7 @@ void GraphicsController::renderAllIn(GraphicsElement::RegionOfInfluence roi) {
                     if (elem->getContext()->Image.width * elem->getContext()->Image.height > (roi.x2 - roi.x + 1) * (roi.y2 - roi.y + 1) &&
                         (roi.x2 - roi.x + 1) * (roi.y2 - roi.y + 1) < 1024) {
                             //resample
-                            GraphicsElement* temp = this->resampleImage(roi, elem);
+                            GraphicsElement* temp = GraphicsElement::resampleImage(roi, elem);
                             temp->render(this->lcd); //it is known that it is contained within the ROI
                             free(temp->getContext()->Image.image->getRawBuffer());
                             delete(temp->getContext()->Image.image);
@@ -99,69 +100,10 @@ void GraphicsController::renderAllIn(GraphicsElement::RegionOfInfluence roi) {
                             continue;
                         }
                 }
-
                 elem->renderWithin(this->lcd, roi);
             }
         }
     }
-}
-
-GraphicsElement* GraphicsController::resampleImage(GraphicsElement::RegionOfInfluence roi, GraphicsElement* img) {
-    //samples the image over the given roi
-    //if the roi extends beyond the boundaries of the image, it simply generates an image of what it can
-
-    GraphicsElement::RegionOfInfluence bounds;
-    GraphicsElement* ret = new GraphicsElement(GraphicsElement::ELEMENT_IMAGE, {.Image={}});
-
-    if (roi.x < img->getContext()->Image.x) {
-        bounds.x = img->getContext()->Image.x;
-    } else {
-        bounds.x = roi.x;
-    }
-
-    if (roi.y < img->getContext()->Image.y) {
-        bounds.y = img->getContext()->Image.y;
-    } else {
-        bounds.y = roi.y;
-    }
-
-    if (roi.x2 > img->getContext()->Image.x + img->getContext()->Image.width - 1) {
-        bounds.x2 = img->getContext()->Image.x + img->getContext()->Image.width - 1;
-    } else {
-        bounds.x2 = roi.x2;
-    }
-
-    if (roi.y2 > img->getContext()->Image.y + img->getContext()->Image.height - 1) {
-        bounds.y2 = img->getContext()->Image.y + img->getContext()->Image.height - 1;
-    } else {
-        bounds.y2 = roi.y2;
-    }
-
-    ret->getContext()->Image.x = bounds.x;
-    ret->getContext()->Image.y = bounds.y;
-    ret->getContext()->Image.width = bounds.x2 - bounds.x + 1;
-    ret->getContext()->Image.height = bounds.y2 - bounds.y + 1;
-    ret->getContext()->Image.layer = img->getLayer();
-
-    uint16_t* buf = (uint16_t*)malloc(sizeof(uint16_t) * ret->getContext()->Image.height * ret->getContext()->Image.width);
-
-    uint16_t* bufP = buf;
-
-    for (int y = bounds.y; bounds.y2 >= y; y++) {
-        for (int x = bounds.x; bounds.x2 >= x; x++) {
-            BitmapImage* other = img->getContext()->Image.image;
-            uint16_t color;
-            if (!other->sample(x - img->getContext()->Image.x, y - img->getContext()->Image.y, &color)) {
-                color = this->samplePixel(x, y, img->getLayer());
-            }
-
-            *(bufP++) = color;
-        }
-    }
-
-    ret->getContext()->Image.image = new BitmapImage((uint8_t*)buf, ret->getContext()->Image.width, ret->getContext()->Image.height, nullptr);
-
-    return ret;
 }
 
 uint16_t GraphicsController::samplePixel(int x, int y, int layerSample) {
@@ -175,6 +117,7 @@ uint16_t GraphicsController::samplePixel(int x, int y, int layerSample) {
     while (it != this->elements.end()) {
         std::list<GraphicsElement*> layer = *it;
         if (layer.size() == 0) {
+            ++it;
             continue;
         }
 
@@ -266,6 +209,7 @@ void GraphicsController::removeGraphicsElement(GraphicsElement *element) {
         
         std::list<GraphicsElement*> layer = *it;
         if (layer.size() == 0) {
+            ++it;
             continue;
         }
 
@@ -273,6 +217,7 @@ void GraphicsController::removeGraphicsElement(GraphicsElement *element) {
         
         if (element->getLayer() != elem->getLayer()) {
             //layer not found
+            ++it;
             continue;
         }
 
@@ -280,7 +225,7 @@ void GraphicsController::removeGraphicsElement(GraphicsElement *element) {
             elem = *iti;
 
             if (elem == element) {
-                layer.remove(elem);
+                (*it).remove(elem);
                 renderAllIn(element->getRenderedROI());
                 return;
             }

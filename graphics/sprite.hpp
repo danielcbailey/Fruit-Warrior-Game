@@ -21,6 +21,7 @@ class Sprite : public GraphicsElement, public Tickable {
     bool registered;
     bool animationRegistered;
     bool hidden;
+    float x, y;
     AnimationPlayer animation;
 
     public:
@@ -29,11 +30,11 @@ class Sprite : public GraphicsElement, public Tickable {
 
     ~Sprite();
 
-    void setPos(int x, int y);
+    void setPos(float x, float y);
 
-    int getX();
+    float getX();
 
-    int getY();
+    float getY();
 
     void setImage(BitmapImage* image);
 

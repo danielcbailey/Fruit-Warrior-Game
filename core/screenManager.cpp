@@ -2,6 +2,8 @@
 
 #include "screenManager.hpp"
 #include "graphics/gameTick.hpp"
+#include "game/inputs.hpp"
+#include "globals.hpp"
 
 ScreenManager::ScreenManager(GameScreen* initialScreen) {
     this->totalTime = 0;
@@ -53,7 +55,7 @@ void ScreenManager::onMainLoop() {
     this->currentFpsIndex = (this->currentFpsIndex + 1) % 5;
 
     //Polling for inputs
-    this->inputArbiter.pollInputs();
+    _inputArbiter->pollInputs(dt);
 
     //Calling screen update function
     //The idea of the screen update function is to act before tickable events are

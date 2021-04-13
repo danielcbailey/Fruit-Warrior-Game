@@ -6,12 +6,12 @@
 #include "inputArbiter.hpp"
 #include "mbed.h"
 
-class ButtonInput : InputBase {
+class ButtonInput : public InputBase {
     private:
 
     DigitalIn pin;
 
-    void poll();
+    void poll(float dt);
 
     int previousState;
 

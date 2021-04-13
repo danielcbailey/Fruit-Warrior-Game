@@ -2,16 +2,17 @@
 
 #include "buttonInput.hpp"
 
-ButtonInput::ButtonInput(PinName pin, InputArbiter* arbiter) : pin(pin) {
+ButtonInput::ButtonInput(PinName pin, InputArbiter* arbiter) : pin(pin), InputBase(arbiter) {
     arbiter->AddInput(this);
+    this->pin.mode(PinMode::PullUp);
 
     //Must make previous state the same as state
     this->previousState = this->pin.read();
 }
 
-void ButtonInput::poll() {
+void ButtonInput::poll(float dt) {
     //Forming event
-    int state = this->pin.read();
+    int state = !this->pin.read(); //inverted because button pulls down when pressed
     ButtonEvent* event = new(ButtonEvent);
     event->previousState = this->previousState;
     event->state = state;
@@ -30,7 +31,7 @@ void ButtonInput::poll() {
     bool prop = true;
     InputStackElement* curr = this->stackTop;
     while (prop && curr != nullptr) {
-        prop = curr->cb(event);
+        prop = curr->cb(event, dt);
         curr = curr->nextElem;
     }
 

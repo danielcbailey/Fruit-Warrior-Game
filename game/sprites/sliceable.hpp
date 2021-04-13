@@ -5,6 +5,11 @@
 
 #include "graphics/sprite.hpp"
 
+#define SLICEABLE_MAX_X 128
+#define SLICEABLE_MIN_X -12
+#define SLICEABLE_MAX_Y 128
+#define SLICEABLE_MIN_Y -4
+
 class Sliceable : public Sprite {
     private:
 
@@ -27,11 +32,7 @@ class Sliceable : public Sprite {
 
     inline float getVelocity() { return this->vel; }
 
-    inline void cut() {
-        if (this->isCut) return;
-        this->isCut = true;
-        this->enableAnimation();
-    }
+    void cut();
 
     inline bool shouldRemove() { return this->removable; }
 

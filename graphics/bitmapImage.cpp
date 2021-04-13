@@ -18,6 +18,7 @@
 #include <cstdlib>
 #include <stdint.h>
 #include "graphicsController.hpp"
+#include "globals.hpp"
 
 BitmapImage::BitmapImage(FileHandle bitmapFile) {
     /*

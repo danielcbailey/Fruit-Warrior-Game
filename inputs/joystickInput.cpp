@@ -2,7 +2,7 @@
 
 #include "joystickInput.hpp"
 
-JoystickInput::JoystickInput(PinName xAxis, PinName yAxis, InputArbiter* arbiter, int flags) : xPin(xAxis), yPin(yAxis) {
+JoystickInput::JoystickInput(PinName xAxis, PinName yAxis, InputArbiter* arbiter, int flags) : xPin(xAxis), yPin(yAxis), InputBase(arbiter) {
     arbiter->AddInput(this);
 
     //Reading flags
@@ -23,7 +23,7 @@ JoystickInput::JoystickInput(PinName xAxis, PinName yAxis, InputArbiter* arbiter
     this->previousY = this->yPin.read() * 2.0f - 1.0f;
 }
 
-void JoystickInput::poll() {
+void JoystickInput::poll(float dt) {
     //Forming event
     JoystickEvent* event = new(JoystickEvent);
 
@@ -91,7 +91,7 @@ void JoystickInput::poll() {
     bool prop = true;
     InputStackElement* curr = this->stackTop;
     while (prop && curr != nullptr) {
-        prop = curr->cb(event);
+        prop = curr->cb(event, dt);
         curr = curr->nextElem;
     }
 

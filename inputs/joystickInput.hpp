@@ -11,13 +11,13 @@
 #define JOYSTICK_INVERT_X 1
 #define JOYSTICK_INVERT_Y 2
 
-class JoystickInput : InputBase {
+class JoystickInput : public InputBase {
     private:
 
     AnalogIn xPin;
     AnalogIn yPin;
 
-    void poll();
+    void poll(float dt);
 
     float previousX;
     float previousY;

@@ -21,8 +21,8 @@ class InputArbiter {
 
     inline int getNextId() { return ++(this->currentId); }
 
-    inline void pollInputs() {
-        std::for_each(this->inputs.begin(), this->inputs.end(), [](InputBase* input) { input->poll(); });
+    inline void pollInputs(float dt) {
+        std::for_each(this->inputs.begin(), this->inputs.end(), [&dt](InputBase* input) { input->poll(dt); });
     }
 };
 

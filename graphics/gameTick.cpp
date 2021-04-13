@@ -3,6 +3,7 @@
 #include "gameTick.hpp"
 #include "tickable.hpp"
 #include "graphicsController.hpp"
+#include "globals.hpp"
 
 GameTickManager _tickManager;
 

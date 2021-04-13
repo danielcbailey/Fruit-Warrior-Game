@@ -58,4 +58,10 @@ extern BitmapImage bomb_3;
 //Animations
 extern Animation bomb_animation;
 
+extern Animation apple_cut_animation;
+extern Animation banana_cut_animation;
+extern Animation orange_cut_animation;
+extern Animation kiwi_cut_animation;
+extern Animation lemon_cut_animation;
+
 #endif //ASSETS_INCLUDED

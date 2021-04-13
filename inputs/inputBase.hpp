@@ -16,7 +16,8 @@
  * 
  * Should return for true if the event should propagate, false for no propagation.
  */
-typedef std::function<const bool(void* eventDetails)> inputCallback;
+typedef bool (*inputCallbackProvided) (void*, float);
+typedef std::function<const bool(void* eventDetails, float dt)> inputCallback;
 
 //A placeholder class to allow the input base to have a pointer to the arbiter
 class InputArbiter;
@@ -33,6 +34,8 @@ class InputBase {
     InputStackElement* stackTop;
 
     InputArbiter* arbiter;
+
+    inline InputBase(InputArbiter* arbiter) : arbiter(arbiter) { this->stackTop = nullptr; }
 
     //Pushes the callback to the top of the stack
     int stackPush(inputCallback cb);
@@ -58,7 +61,7 @@ class InputBase {
      *
      * Returns the id of the callback registration, used with detach
      */    
-    int attach(inputCallback callback, void* context);
+    int attach(inputCallback callback);
 
     /*
      * The method to remove a callback from the call stack
@@ -69,7 +72,7 @@ class InputBase {
      * The method the input arbiter invokes to poll for events to dispatch
      * The dispatch location should be the top callback on the stack.
      */
-    virtual void poll() = 0;
+    virtual void poll(float dt) = 0;
 };
 
 #endif //INPUT_BASE_INCLUDED

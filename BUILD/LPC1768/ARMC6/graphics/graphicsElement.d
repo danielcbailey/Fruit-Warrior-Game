@@ -150,4 +150,5 @@ BUILD\LPC1768\ARMC6\graphics\graphicsElement.o: \
   mbed-os\platform\include\platform\mbed_stats.h \
   mbed-os\platform\include\platform\Stream.h \
   mbed-os\platform\include\platform\FileLike.h graphics\bitmapImage.hpp \
-  graphics\colorLUT.hpp
+  graphics\colorLUT.hpp globals.hpp graphics\graphicsController.hpp \
+  graphics\animationPlayer.hpp graphics\animation.hpp

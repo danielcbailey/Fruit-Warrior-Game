@@ -309,7 +309,7 @@
 
         for (int i = 0; length + 1 > i; i++) {
             this->serial.write(bufP++, 1);
-            wait_us(20);
+            if (length > 16) wait_us(40);
         }
 
         this->awaitResponse();
@@ -340,7 +340,7 @@
 
         for (int i = 0; length + 3 > i; i++) {
             this->serial.write(bufP++, 1);
-            wait_us(20);
+            if (length > 16) wait_us(40);
         }
 
         this->awaitResponse();
@@ -551,6 +551,11 @@
     void uLCD::BLIT(int x, int y, int width, int height, uint16_t* image) {
         this->purgeBuffer();
 
+        //ensuring valid image first
+        if (width <= 0 || height <= 0) {
+            return;
+        }
+
         char buf[10];
         buf[0] = 0x0;
         buf[1] = 0xA;
@@ -608,9 +613,10 @@
             return;
         }
 
+        char buf[10];
+
         //enable clipping
         this->purgeBuffer();
-        char buf[10];
         buf[0] = 0xFF;
         buf[1] = 0x6C;
         buf[2] = 0x0;
@@ -620,6 +626,34 @@
 
         this->awaitResponse();
 
+        //making sure clipping coordinates are contained to the screen area
+        int x1 = x + width - 1;
+        int y1 = y + height - 1;
+        if (x < 0) {
+            x = 0;
+        }
+        if (y < 0) {
+            y = 0;
+        }
+        if (x1 < 0) {
+            x1 = 0;
+        }
+        if (y1 < 0) {
+            y1 = 0;
+        }
+        if (x > 127) {
+            x = 127;
+        }
+        if (x1 > 127) {
+            x1 = 127;
+        }
+        if (y > 127) {
+            y = 127;
+        }
+        if (y1 > 127) {
+            y1 = 127;
+        }
+
         //set clipping region
         this->purgeBuffer();
 
@@ -627,8 +661,8 @@
         buf[1] = 0xBF;
         this->addIntToBuf(&buf[2], x);
         this->addIntToBuf(&buf[4], y);
-        this->addIntToBuf(&buf[6], x + width - 1);
-        this->addIntToBuf(&buf[8], y + height - 1);
+        this->addIntToBuf(&buf[6], x1);
+        this->addIntToBuf(&buf[8], y1);
         this->serial.write(buf, 10);
 
         this->awaitResponse();

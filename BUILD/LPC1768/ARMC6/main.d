@@ -151,4 +151,10 @@ BUILD\LPC1768\ARMC6\main.o: main.cpp BUILD\LPC1768\ARMC6\mbed_config.h \
   graphics\colorLUT.hpp graphics\uLCD.hpp graphics\graphicsElement.hpp \
   graphics\graphicsController.hpp graphics\animationPlayer.hpp \
   graphics\animation.hpp assets\assets.hpp globals.hpp \
-  game\sprites\bomb.hpp graphics\sprite.hpp graphics\gameTick.hpp
+  game\sprites\bomb.hpp graphics\sprite.hpp graphics\tickable.hpp \
+  graphics\gameTick.hpp core\screenManager.hpp core\gameScreen.hpp \
+  inputs\inputArbiter.hpp inputs\inputBase.hpp \
+  game\screens\titleScreen.hpp game\inputs.hpp inputs\joystickInput.hpp \
+  inputs\buttonInput.hpp game\screens\gamePlayScreen.hpp \
+  game\fruitManager.hpp game\sprites\sliceable.hpp \
+  game\sprites\ninja.hpp game\compostManager.hpp game\compostPile.hpp

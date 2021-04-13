@@ -4,6 +4,9 @@
 #include "sprites/sliceable.hpp"
 #include "sprites/bomb.hpp"
 
+#ifndef FRUIT_MANAGER_INCLUDED
+#define FRUIT_MANAGER_INCLUDED
+
 class FruitManager : public Tickable {
     private:
 
@@ -12,6 +15,7 @@ class FruitManager : public Tickable {
 
     int knifeX;
     int knifeY;
+    bool justGennedFruit;
 
     public:
 
@@ -26,3 +30,5 @@ class FruitManager : public Tickable {
         this->knifeY = y;
     }
 };
+
+#endif //FRUIT_MANAGER_INCLUDED

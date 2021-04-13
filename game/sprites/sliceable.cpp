@@ -1,11 +1,9 @@
 
 
 #include "sliceable.hpp"
-
-#define SLICEABLE_MAX_X 128
-#define SLICEABLE_MIN_X -12
-#define SLICEABLE_MAX_Y 128
-#define SLICEABLE_MIN_Y -12
+#include "screens/gamePlayScreen.hpp"
+#include "globals.hpp"
+#include "game/compostManager.hpp"
 
 Sliceable::Sliceable(float bearing, float vel, int points, int x0, int y0,
               Animation* cutAnimation, BitmapImage* image) :
@@ -13,6 +11,7 @@ Sliceable::Sliceable(float bearing, float vel, int points, int x0, int y0,
     
     this->isCut = false;
     this->removable = false;
+    this->setLayer(10); //10 is the fruit layer
     this->setPos(x0, y0);
     this->setImage(image);
     this->getAnimationPlayer()->setAnimation(cutAnimation, 0.5f,
@@ -20,8 +19,18 @@ Sliceable::Sliceable(float bearing, float vel, int points, int x0, int y0,
 }
 
 void Sliceable::onGameTick(float dt) {
-    int x = this->getX() + cos(this->bearing) * this->vel * dt;
-    int y = this->getY() + sin(this->bearing) * this->vel * dt;
+    float x = this->getX() + cos(this->bearing) * this->vel * dt;
+    float y = this->getY() + sin(this->bearing) * this->vel * dt;
+
+    if (!this->isCut && _gamePlayScreen.getCompostManager()->testCollision(this->getX() + 5, this->getY() + 5, 8)) {
+        //Hit a compost pile
+        this->removable = true;
+    }
+
+    if (this->isCut && this->getAnimationPlayer()->isDone()) {
+        //slicing animation is finished, can remove
+        this->removable = true;
+    }
 
     if (x > SLICEABLE_MAX_X ||
         x < SLICEABLE_MIN_X ||
@@ -34,3 +43,11 @@ void Sliceable::onGameTick(float dt) {
 
     this->setPos(x, y);
 }
+
+void Sliceable::cut() {
+        if (this->isCut) return;
+        this->isCut = true;
+        this->enableAnimation();
+
+        _gamePlayScreen.setScore(_gamePlayScreen.getScore() + this->points);
+    }
