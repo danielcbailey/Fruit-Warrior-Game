@@ -10,6 +10,8 @@
 #define SLICEABLE_MAX_Y 128
 #define SLICEABLE_MIN_Y -4
 
+extern bool _sliceablePlayMode;
+
 class Sliceable : public Sprite {
     private:
 

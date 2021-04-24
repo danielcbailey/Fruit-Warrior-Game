@@ -23,13 +23,13 @@ class ScreenManager {
     GameScreen* currentScreen;
     GameScreen* requestedScreen;
 
-    float frameTimes[5];
-
     Timer timer;
 
-    //Calculated as a rolling average of the last 5 frames.
+    long long int frameCount;
+    int deltaFrames;
     float fps;
-    int currentFpsIndex;
+    float prevTotalTime;
+    bool paused;
 
     float totalTime;
     long long int previousTime;
@@ -44,6 +44,8 @@ class ScreenManager {
     inline float getFPS() { return this->fps; }
 
     inline float getTotalTime() { return this->totalTime; }
+
+    inline void setPaused(bool value) { this->paused = value; }
 
     //Called by the main function in the true loop
     //Updates the tick manager

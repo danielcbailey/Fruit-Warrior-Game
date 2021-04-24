@@ -8,6 +8,8 @@
 #include "game/fruitManager.hpp"
 #include "sprites/ninja.hpp"
 #include "game/compostManager.hpp"
+#include <cstdint>
+#include "graphics/renderedText.hpp"
 
 class Knife;
 
@@ -16,6 +18,7 @@ class Knife;
 class GamePlayScreen : public GameScreen {
     private:
 
+    RenderedText* scoreText;
     GraphicsElement* background;
     FruitManager* fruitManager;
     CompostManager* compostManager;
@@ -23,6 +26,15 @@ class GamePlayScreen : public GameScreen {
     int score;
     Ninja* player;
     Knife* knife;
+    bool paused;
+    int buttonEvtHandle;
+    int comboMultiplier;
+
+    bool handleButton(void* evtDetails, float dt);
+
+    float* genGaussianKernel(int kw, int kh);
+
+    uint16_t* blurSection(int xs, int ys, int width, int height, float* kernel, int kw, int kh);
 
     public:
 
@@ -36,6 +48,18 @@ class GamePlayScreen : public GameScreen {
     int getSpawnInterval() { return this->spawnInterval; }
 
     void redrawStatusBar();
+
+    void pause();
+
+    void resume();
+
+    inline bool isPaused() { return this->paused; }
+
+    inline int getComboMultiplier() { return this->comboMultiplier; }
+
+    inline void setComboMultiplier(int value) { this->comboMultiplier = value; }
+
+    inline void setSpawnInterval(int value) { this->spawnInterval = value; }
 
     inline void setScore(int score) { 
         this->score = score;

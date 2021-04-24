@@ -12,6 +12,7 @@
  */
 
 #include "uLCD.hpp"
+#include <chrono>
 #include <cstdio>
 #include <cstring>
 
@@ -21,21 +22,27 @@
      * With the baud rate, the library will always use 9600 for initial communication with the uLCD
      * It sets the new baud rate after starting initial communication.
      */
-    uLCD::uLCD(PinName tx, PinName rx, PinName reset, uLCDBaud baud) : serial(tx, rx, 9600), resetSignal(reset) {
+    uLCD::uLCD(PinName tx, PinName rx, PinName reset, uLCDBaud baud) : serial(tx, rx, 9600), resetSignal(reset), waitFunction(nullptr) {
         
         this->resetSignal.write(true);
+        this->delayedWritePending = false;
+        this->serial.setISRPossibility(true);
 
         this->reset();
+        
+        //Clearing the screen
         this->cls();
+
+        this->awaitResponse();
         
         //Set baud
-        this->purgeBuffer();
 
         char buf[4];
         buf[0] = 0x0;
         buf[1] = 0xB;
         this->addIntToBuf(&buf[2], (int)baud);
 
+        this->serial.checkBufferFree();
         this->serial.write(buf, 4);
 
         int baudv = 9600;
@@ -66,19 +73,11 @@
             break;
         }
 
-        wait_us(4096); //waiting for all bytes to transmit because the mbed api doesn't
+        this->serial.sync();
 
-        this->serial.baud(baudv);
+        this->serial.setBaud(baudv);
 
-        //going to ignore the result because it may have been recieved before the baud switch
-        char resp;
-        while(!this->serial.readable());
-        this->serial.read(&resp, sizeof(char));
-
-        wait_us(1000); //testing
-
-        this->purgeBuffer();
-
+        //cls will await for the response before advancing since all commands are asynchonous
         this->cls(); //Just to send a command post-baud change
 
         this->setTextColor(0xFFFF); //making text foreground white
@@ -91,33 +90,38 @@
     }
 
     //General functions
-    
-    void uLCD::purgeBuffer() {
-        char trash;
-        while (this->serial.readable()) {
-            this->serial.read(&trash, sizeof(char));
-        }
-    }
 
     void uLCD::awaitResponse() {
-        char resp;
-        while(!this->serial.readable());
-        this->serial.read(&resp, sizeof(char));
+        if (this->bypassAwait) {
+            this->bypassAwait = false;
+            return;
+        }
+
+        while (delayedWritePending);
+
+        this->serial.sync();
+
+        char resp = 0;
+        while(!resp) {
+            this->serial.read(&resp, sizeof(char));
+        }
 
         if (resp != 0x6) {
-            printf("Display did not respond with Status OK.\n");
+            printfdbg("Display did not respond with Status OK.\n");
         }
+
+        this->serial.flushReceiving();
     }
 
     /** Clear the screen and fills the screen with the set background color. Defaults to black (0x0)*/
     void uLCD::cls() {
-        this->purgeBuffer();
-        char buf[2];
+        this->awaitResponse();
+        char* buf = (char*) malloc_safe(2);
+        printMalloc(buf);
         buf[0] = 0xFF;
         buf[1] = 0xD7;
-        this->serial.write(buf, 2);
-
-        this->awaitResponse();
+        this->serial.checkBufferFree();
+        this->serial.writeAndFree(buf, 2);
     }
 
     /** Resets the screen, blocks for 3 seconds */
@@ -126,6 +130,28 @@
         wait_us(50);
         this->resetSignal.write(true);
         wait_us(3000000);
+        this->bypassAwait = true;
+    }
+
+    void uLCD::writeBack() {
+        if (this->delayFreeable) {
+            this->serial.writeAndFree(this->delayBuffer, this->delaySize);
+        } else {
+            this->serial.write(this->delayBuffer, this->delaySize);
+        }
+
+        delay.detach();
+
+        this->delayedWritePending = false;
+    }
+
+    void uLCD::waitToWrite(void* buffer, int size, int delay_us, bool freeable) {
+        this->delayedWritePending = true;
+        this->delayBuffer = buffer;
+        this->delaySize = size;
+        this->delayFreeable = freeable;
+        //Of course, the non-deprecated option doesn't exist
+        delay.attach(callback(this, &uLCD::writeBack), std::chrono::microseconds(delay_us));
     }
 
     //Text Functions
@@ -135,8 +161,9 @@
      * @param color The 4DGL color to set the text foreground color
      */
     void uLCD::setTextColor(uint16_t color) {
-        this->purgeBuffer();
-        char buf[4];
+        this->awaitResponse();
+        char* buf = (char*) malloc_safe(4);
+        printMalloc(buf);
         buf[0] = 0xFF;
         buf[1] = 0x7F;
         
@@ -144,9 +171,8 @@
         buf[2] = color;
         buf[3] = color >> 8;
 
-        this->serial.write(buf, 4);
-
-        this->awaitResponse();
+        this->serial.checkBufferFree();
+        this->serial.writeAndFree(buf, 4);
     }
 
     /**
@@ -154,8 +180,9 @@
      * @param color The 4DGL color to set the text background color
      */
     void uLCD::setTextBackground(uint16_t color) {
-        this->purgeBuffer();
-        char buf[4];
+        this->awaitResponse();
+        char* buf = (char*) malloc_safe(4);
+        printMalloc(buf);
         buf[0] = 0xFF;
         buf[1] = 0x7E;
         
@@ -163,9 +190,8 @@
         buf[2] = color;
         buf[3] = color >> 8;
 
-        this->serial.write(buf, 4);
-
-        this->awaitResponse();
+        this->serial.checkBufferFree();
+        this->serial.writeAndFree(buf, 4);
     }
 
     /**
@@ -175,24 +201,23 @@
      */
     void uLCD::setFontSize(int width, int height) {
         //sending two separate commands
-        this->purgeBuffer();
+        this->awaitResponse();
 
-        char buf[4];
+        char* buf = (char*) malloc_safe(4);
+        printMalloc(buf);
         buf[0] = 0xFF;
         buf[1] = 0x7C;
         this->addIntToBuf(&buf[2], width);
+        this->serial.checkBufferFree();
         this->serial.write(buf, 4);
 
         this->awaitResponse();
-
-        this->purgeBuffer();
 
         buf[0] = 0xFF;
         buf[1] = 0x7B;
         this->addIntToBuf(&buf[2], height);
-        this->serial.write(buf, 4);
-
-        this->awaitResponse();
+        this->serial.checkBufferFree();
+        this->serial.writeAndFree(buf, 4);
     }
 
     /**
@@ -201,16 +226,16 @@
      * @param bold True to bold next text, false to reset manually
      */
     void uLCD::setTextBold(bool bold) {
-        this->purgeBuffer();
-        char buf[4];
+        this->awaitResponse();
+        char* buf = (char*) malloc_safe(4);
+        printMalloc(buf);
         buf[0] = 0xFF;
         buf[1] = 0x76;
         buf[2] = 0x0;
         buf[3] = bold;
 
-        this->serial.write(buf, 4);
-
-        this->awaitResponse();
+        this->serial.checkBufferFree();
+        this->serial.writeAndFree(buf, 4);
     }
 
     /**
@@ -219,16 +244,16 @@
      * @param italic True to italicize next text, false to reset manually
      */
     void uLCD::setTextItalic(bool italic) {
-        this->purgeBuffer();
-        char buf[4];
+        this->awaitResponse();
+        char* buf = (char*) malloc_safe(4);
+        printMalloc(buf);
         buf[0] = 0xFF;
         buf[1] = 0x75;
         buf[2] = 0x0;
         buf[3] = italic;
 
-        this->serial.write(buf, 4);
-
-        this->awaitResponse();
+        this->serial.checkBufferFree();
+        this->serial.writeAndFree(buf, 4);
     }
 
     /**
@@ -237,16 +262,16 @@
      * @param invert True to invert colors for next text, false to reset manually
      */
     void uLCD::setTextInverted(bool invert) {
-        this->purgeBuffer();
-        char buf[4];
+        this->awaitResponse();
+        char* buf = (char*) malloc_safe(4);
+        printMalloc(buf);
         buf[0] = 0xFF;
         buf[1] = 0x74;
         buf[2] = 0x0;
         buf[3] = invert;
 
-        this->serial.write(buf, 4);
-
-        this->awaitResponse();
+        this->serial.checkBufferFree();
+        this->serial.writeAndFree(buf, 4);
     }
 
     /**
@@ -255,16 +280,16 @@
      * @param underline True to underline next text, false to reset manually
      */
     void uLCD::setTextUnderline(bool underline) {
-        this->purgeBuffer();
-        char buf[4];
+        this->awaitResponse();
+        char* buf = (char*) malloc_safe(4);
+        printMalloc(buf);
         buf[0] = 0xFF;
         buf[1] = 0x73;
         buf[2] = 0x0;
         buf[3] = underline;
 
-        this->serial.write(buf, 4);
-
-        this->awaitResponse();
+        this->serial.checkBufferFree();
+        this->serial.writeAndFree(buf, 4);
     }
 
     /**
@@ -272,16 +297,16 @@
      * @param c The character to print
      */
     void uLCD::print(char c) {
-        this->purgeBuffer();
-        char buf[4];
+        this->awaitResponse();
+        char* buf = (char*) malloc_safe(4);
+        printMalloc(buf);
         buf[0] = 0xFF;
         buf[1] = 0xFE;
         buf[2] = 0x0;
         buf[3] = c;
 
-        this->serial.write(buf, 4);
-
-        this->awaitResponse();
+        this->serial.checkBufferFree();
+        this->serial.writeAndFree(buf, 4);
     }
 
     /**
@@ -290,12 +315,14 @@
      * @param str The null-terminated string to print
      */
     void uLCD::print(char* str) {
-        this->purgeBuffer();
+        this->awaitResponse();
         char buf[2];
         buf[0] = 0x0;
         buf[1] = 0x6;
 
+        this->serial.checkBufferFree();
         this->serial.write(buf, 2);
+        this->serial.sync();
 
         wait_us(25); //delay to process the command header
 
@@ -309,10 +336,9 @@
 
         for (int i = 0; length + 1 > i; i++) {
             this->serial.write(bufP++, 1);
+            this->serial.sync();
             if (length > 16) wait_us(40);
         }
-
-        this->awaitResponse();
     }
 
     /**
@@ -324,7 +350,7 @@
         va_list args;
         va_start(args, str);
 
-        this->purgeBuffer();
+        this->awaitResponse();
 
         char buf[258];
         buf[0] = 0x0;
@@ -338,12 +364,12 @@
 
         char* bufP = buf;
 
+        this->serial.checkBufferFree();
+
         for (int i = 0; length + 3 > i; i++) {
             this->serial.write(bufP++, 1);
-            if (length > 16) wait_us(40);
+            if (length > 14) wait_us(40);
         }
-
-        this->awaitResponse();
 
         va_end(args);
     }
@@ -355,16 +381,16 @@
      * @param y The y text coordinate
      */
     void uLCD::locate(int x, int y) {
-        this->purgeBuffer();
+        this->awaitResponse();
 
-        char buf[6];
+        char* buf = (char*) malloc_safe(6);
+        printMalloc(buf);
         buf[0] = 0xFF;
         buf[1] = 0xE4;
         this->addIntToBuf(&buf[2], y);
         this->addIntToBuf(&buf[4], x);
-        this->serial.write(buf, 6);
-
-        this->awaitResponse();
+        this->serial.checkBufferFree();
+        this->serial.writeAndFree(buf, 6);
     }
 
     //Graphics Functions
@@ -377,9 +403,10 @@
      * @param color The 4DGL color for the circle's outline
      */
     void uLCD::drawCircle(int x, int y, int radius, uint16_t color) {
-        this->purgeBuffer();
+        this->awaitResponse();
 
-        char buf[10];
+        char* buf = (char*) malloc_safe(10);
+        printMalloc(buf);
         buf[0] = 0xFF;
         buf[1] = 0xCD;
         this->addIntToBuf(&buf[2], x);
@@ -387,9 +414,8 @@
         this->addIntToBuf(&buf[6], radius);
         buf[8] = color;
         buf[9] = color >> 8;
-        this->serial.write(buf, 10);
-
-        this->awaitResponse();
+        this->serial.checkBufferFree();
+        this->serial.writeAndFree(buf, 10);
     }
 
     /**
@@ -400,9 +426,10 @@
      * @param color The 4DGL color for the circle's fill
      */
     void uLCD::drawCircleFilled(int x, int y, int radius, uint16_t color) {
-        this->purgeBuffer();
+        this->awaitResponse();
 
-        char buf[10];
+        char* buf = (char*) malloc_safe(10);
+        printMalloc(buf);
         buf[0] = 0xFF;
         buf[1] = 0xCC;
         this->addIntToBuf(&buf[2], x);
@@ -410,9 +437,8 @@
         this->addIntToBuf(&buf[6], radius);
         buf[8] = color;
         buf[9] = color >> 8;
-        this->serial.write(buf, 10);
-
-        this->awaitResponse();
+        this->serial.checkBufferFree();
+        this->serial.writeAndFree(buf, 10);
     }
 
     /**
@@ -426,9 +452,10 @@
      * @param color The 4DGL color for the triangle's outline
      */
     void uLCD::drawTriangle(int x1, int y1, int x2, int y2, int x3, int y3, uint16_t color) {
-        this->purgeBuffer();
+        this->awaitResponse();
 
-        char buf[16];
+        char* buf = (char*) malloc_safe(16);
+        printMalloc(buf);
         buf[0] = 0xFF;
         buf[1] = 0xC9;
         this->addIntToBuf(&buf[2], x1);
@@ -439,9 +466,8 @@
         this->addIntToBuf(&buf[12], y3);
         buf[14] = color;
         buf[15] = color >> 8;
-        this->serial.write(buf, 16);
-
-        this->awaitResponse();
+        this->serial.checkBufferFree();
+        this->serial.writeAndFree(buf, 16);
     }
 
     /**
@@ -453,9 +479,10 @@
      * @param color The 4DGL color for the line
      */
     void uLCD::drawLine(int x1, int y1, int x2, int y2, uint16_t color) {
-        this->purgeBuffer();
+        this->awaitResponse();
 
-        char buf[12];
+        char* buf = (char*) malloc_safe(12);
+        printMalloc(buf);
         buf[0] = 0xFF;
         buf[1] = 0xD2;
         this->addIntToBuf(&buf[2], x1);
@@ -464,9 +491,8 @@
         this->addIntToBuf(&buf[8], y2);
         buf[10] = color;
         buf[11] = color >> 8;
-        this->serial.write(buf, 12);
-
-        this->awaitResponse();
+        this->serial.checkBufferFree();
+        this->serial.writeAndFree(buf, 12);
     }
 
     /**
@@ -478,9 +504,10 @@
      * @param color The 4DGL color for the rectangle's outline
      */
     void uLCD::drawRectangle(int x1, int y1, int x2, int y2, uint16_t color) {
-        this->purgeBuffer();
+        this->awaitResponse();
 
-        char buf[12];
+        char* buf = (char*) malloc_safe(12);
+        printMalloc(buf);
         buf[0] = 0xFF;
         buf[1] = 0xCF;
         this->addIntToBuf(&buf[2], x1);
@@ -489,9 +516,8 @@
         this->addIntToBuf(&buf[8], y2);
         buf[10] = color;
         buf[11] = color >> 8;
-        this->serial.write(buf, 12);
-
-        this->awaitResponse();
+        this->serial.checkBufferFree();
+        this->serial.writeAndFree(buf, 12);
     }
 
     /**
@@ -503,9 +529,10 @@
      * @param color The 4DGL color for the rectangle's fill
      */
     void uLCD::drawRectangleFilled(int x1, int y1, int x2, int y2, uint16_t color) {
-        this->purgeBuffer();
+        this->awaitResponse();
 
-        char buf[12];
+        char* buf = (char*) malloc_safe(12);
+        printMalloc(buf);
         buf[0] = 0xFF;
         buf[1] = 0xCE;
         this->addIntToBuf(&buf[2], x1);
@@ -514,9 +541,8 @@
         this->addIntToBuf(&buf[8], y2);
         buf[10] = color;
         buf[11] = color >> 8;
-        this->serial.write(buf, 12);
-
-        this->awaitResponse();
+        this->serial.checkBufferFree();
+        this->serial.writeAndFree(buf, 12);
     }
 
     /**
@@ -526,18 +552,18 @@
      * @param color The 4DGL color for the pixel
      */
     void uLCD::setPixel(int x, int y, uint16_t color) {
-        this->purgeBuffer();
+        this->awaitResponse();
 
-        char buf[8];
+        char* buf = (char*) malloc_safe(8);
+        printMalloc(buf);
         buf[0] = 0xFF;
         buf[1] = 0xCB;
         this->addIntToBuf(&buf[2], x);
         this->addIntToBuf(&buf[4], y);
         buf[6] = color;
         buf[7] = color >> 8;
-        this->serial.write(buf, 8);
-
-        this->awaitResponse();
+        this->serial.checkBufferFree();
+        this->serial.writeAndFree(buf, 8);
     }
 
     /**
@@ -548,28 +574,31 @@
      * @param height The height of the bitmap
      * @param image The buffer containing the bitmap. Must be at least of size width * height
      */
-    void uLCD::BLIT(int x, int y, int width, int height, uint16_t* image) {
-        this->purgeBuffer();
-
+    void uLCD::BLIT(int x, int y, int width, int height, uint16_t* image, bool freeable) {
         //ensuring valid image first
         if (width <= 0 || height <= 0) {
+            if (freeable) {
+                free_safe(image);
+                printFree(image);
+            }
             return;
         }
 
-        char buf[10];
+        this->awaitResponse();
+
+        char* buf = (char*) malloc_safe(10);
+        printMalloc(buf);
         buf[0] = 0x0;
         buf[1] = 0xA;
         this->addIntToBuf(&buf[2], x);
         this->addIntToBuf(&buf[4], y);
         this->addIntToBuf(&buf[6], width);
         this->addIntToBuf(&buf[8], height);
-        this->serial.write(buf, 10);
+        this->serial.checkBufferFree();
+        this->serial.writeAndFree(buf, 10);
+        this->serial.checkBufferFree();
 
-        wait_us(2500); //Giving the display time to process the command header before the payload
-
-        this->serial.write(image, width * height * 2);
-
-        this->awaitResponse();
+        this->waitToWrite(image, width * height * 2, 2500, freeable);
     }
 
     /**
@@ -577,16 +606,16 @@
      * @param color The color for the outline, zero disables outlines
      */
     void uLCD::setOutlineColor(uint16_t color) {
-        this->purgeBuffer();
+        this->awaitResponse();
 
-        char buf[4];
+        char* buf = (char*) malloc_safe(4);
+        printMalloc(buf);
         buf[0] = 0xFF;
         buf[1] = 0x67;
         buf[2] = color;
         buf[3] = color >> 8;
-        this->serial.write(buf, 4);
-
-        this->awaitResponse();
+        this->serial.checkBufferFree();
+        this->serial.writeAndFree(buf, 4);
     }
 
     /**
@@ -596,16 +625,17 @@
      * @param width The width of the clipping window
      * @param height The height of the clipping window
      */
-     void uLCD::setClippingWindow(int x, int y, int width, int height) {
+    void uLCD::setClippingWindow(int x, int y, int width, int height) {
+        this->awaitResponse();    
         if (!x && !y && !width && !height) {
             //disable clipping
-            this->purgeBuffer();
             char buf[4];
             buf[0] = 0xFF;
             buf[1] = 0x6C;
             buf[2] = 0x0;
             buf[3] = 0x0;
 
+            this->serial.checkBufferFree();
             this->serial.write(buf, 4);
 
             this->awaitResponse();
@@ -613,15 +643,16 @@
             return;
         }
 
-        char buf[10];
+        char* buf = (char*) malloc_safe(10);
+        printMalloc(buf);
 
         //enable clipping
-        this->purgeBuffer();
         buf[0] = 0xFF;
         buf[1] = 0x6C;
         buf[2] = 0x0;
         buf[3] = 0x1;
 
+        this->serial.checkBufferFree();
         this->serial.write(buf, 4);
 
         this->awaitResponse();
@@ -655,7 +686,6 @@
         }
 
         //set clipping region
-        this->purgeBuffer();
 
         buf[0] = 0xFF;
         buf[1] = 0xBF;
@@ -663,7 +693,6 @@
         this->addIntToBuf(&buf[4], y);
         this->addIntToBuf(&buf[6], x1);
         this->addIntToBuf(&buf[8], y1);
-        this->serial.write(buf, 10);
-
-        this->awaitResponse();
+        this->serial.checkBufferFree();
+        this->serial.writeAndFree(buf, 10);
      }

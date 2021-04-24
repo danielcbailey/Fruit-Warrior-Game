@@ -16,18 +16,31 @@
 
 #include "mbed.h"
 #include <cstdint>
+#include "serialAsync.hpp"
+
+//us is the minimum length of the delay
+typedef void (*WaitFunction)(int us);
 
 class uLCD {
     private:
 
-    UnbufferedSerial serial;
+    SerialAsync serial;
     DigitalOut resetSignal;
+    WaitFunction waitFunction;
+    bool bypassAwait;
+    volatile bool delayedWritePending;
+    Timeout delay;
+    void* delayBuffer;
+    int delaySize;
+    int delayFreeable;
 
     void addIntToBuf(char* buf, int v);
 
-    void purgeBuffer();
-
     void awaitResponse();
+
+    void writeBack();
+
+    void waitToWrite(void* buffer, int size, int delay_us, bool freeable);
 
     public:
 
@@ -211,7 +224,7 @@ class uLCD {
      * @param height The height of the bitmap
      * @param image The buffer containing the bitmap. Must be at least of size width * height
      */
-    void BLIT(int x, int y, int width, int height, uint16_t* image);
+    void BLIT(int x, int y, int width, int height, uint16_t* image, bool freeable);
 
     /**
      * Sets the outline color for applicable shapes.

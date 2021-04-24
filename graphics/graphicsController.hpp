@@ -22,6 +22,8 @@ class GraphicsController {
 
     std::list<AnimationPlayer*> animations;
 
+    GraphicsElement::RegionOfInfluence globalBoundary;
+
     //used for rendering new placement of element
     void renderAllAbove(GraphicsElement* element, bool add);
 
@@ -65,11 +67,20 @@ class GraphicsController {
     void removeAnimation(AnimationPlayer* player);
 
     /*
+     * Reloads every graphics element on the screen.
+     */
+    void refresh();
+
+    /*
      * Processes all animations registered with the graphics controller
      */
     void handleGraphicsTick(float dt);
 
     inline uLCD* getLCD() { return this->lcd; }
+
+    inline void setGlobalBoundary(GraphicsElement::RegionOfInfluence roi) { this->globalBoundary = roi; }
+
+    inline GraphicsElement::RegionOfInfluence getGlobalBoundary() { return this->globalBoundary; }
 };
 
 #endif //GRAPHICS_CONTROLLER_INCLUDED

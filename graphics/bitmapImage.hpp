@@ -43,6 +43,8 @@ class BitmapImage {
 
     inline uint8_t* getRawBuffer() { return this->bitmap; }
 
+    inline ColorLUT* getColorLUT() { return this->lut; }
+
     void render(uLCD* lcd, int x, int y, int layer);
 
     bool sample(int x, int y, uint16_t* color);

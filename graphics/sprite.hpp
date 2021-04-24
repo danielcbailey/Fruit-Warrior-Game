@@ -49,6 +49,8 @@ class Sprite : public GraphicsElement, public Tickable {
 
     void hide();
 
+    bool isHidden() { return this->hidden; }
+
     //if already registered, needs to unregister the element and register it for layer changes to take effect
     void setLayer(int layer);
 };

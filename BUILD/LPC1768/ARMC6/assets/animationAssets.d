@@ -150,4 +150,5 @@ BUILD\LPC1768\ARMC6\assets\animationAssets.o: assets\animationAssets.cpp \
   mbed-os\platform\include\platform\mbed_stats.h \
   mbed-os\platform\include\platform\Stream.h \
   mbed-os\platform\include\platform\FileLike.h graphics\colorLUT.hpp \
-  graphics\uLCD.hpp graphics\graphicsElement.hpp graphics\animation.hpp
+  graphics\uLCD.hpp hardware\serialAsync.hpp hardware\dma.h \
+  graphics\graphicsElement.hpp graphics\animation.hpp

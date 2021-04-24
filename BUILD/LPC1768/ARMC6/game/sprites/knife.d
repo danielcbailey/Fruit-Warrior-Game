@@ -149,11 +149,13 @@ BUILD\LPC1768\ARMC6\game\sprites\knife.o: game\sprites\knife.cpp \
   mbed-os\platform\include\platform\ScopedRamExecutionLock.h \
   mbed-os\platform\include\platform\mbed_stats.h \
   mbed-os\platform\include\platform\Stream.h \
-  mbed-os\platform\include\platform\FileLike.h \
-  graphics\animationPlayer.hpp graphics\animation.hpp \
+  mbed-os\platform\include\platform\FileLike.h hardware\serialAsync.hpp \
+  hardware\dma.h graphics\animationPlayer.hpp graphics\animation.hpp \
   graphics\bitmapImage.hpp graphics\colorLUT.hpp graphics\tickable.hpp \
-  assets\assets.hpp game\screens\gamePlayScreen.hpp core\gameScreen.hpp \
+  game\sprites\knifeTrajectoryMarker.hpp assets\assets.hpp \
+  game\screens\gamePlayScreen.hpp core\gameScreen.hpp \
   game\fruitManager.hpp game\sprites\sliceable.hpp game\sprites\bomb.hpp \
   game\sprites\ninja.hpp game\compostManager.hpp game\compostPile.hpp \
+  graphics\renderedText.hpp graphics\graphicsController.hpp \
   game\inputs.hpp inputs\joystickInput.hpp inputs\inputBase.hpp \
   inputs\inputArbiter.hpp inputs\buttonInput.hpp globals.hpp

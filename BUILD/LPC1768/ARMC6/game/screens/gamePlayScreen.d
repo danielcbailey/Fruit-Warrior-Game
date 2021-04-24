@@ -150,11 +150,14 @@ BUILD\LPC1768\ARMC6\game\screens\gamePlayScreen.o: \
   mbed-os\platform\include\platform\ScopedRamExecutionLock.h \
   mbed-os\platform\include\platform\mbed_stats.h \
   mbed-os\platform\include\platform\Stream.h \
-  mbed-os\platform\include\platform\FileLike.h game\fruitManager.hpp \
-  game\sprites\sliceable.hpp graphics\sprite.hpp \
-  graphics\animationPlayer.hpp graphics\animation.hpp \
-  graphics\bitmapImage.hpp graphics\colorLUT.hpp graphics\tickable.hpp \
-  game\sprites\bomb.hpp game\sprites\ninja.hpp game\compostManager.hpp \
-  game\compostPile.hpp assets\assets.hpp graphics\graphicsController.hpp \
-  game\sprites\knife.hpp core\screenManager.hpp inputs\inputArbiter.hpp \
-  inputs\inputBase.hpp game\screens\gameWinScreen.hpp
+  mbed-os\platform\include\platform\FileLike.h hardware\serialAsync.hpp \
+  hardware\dma.h game\fruitManager.hpp game\sprites\sliceable.hpp \
+  graphics\sprite.hpp graphics\animationPlayer.hpp \
+  graphics\animation.hpp graphics\bitmapImage.hpp graphics\colorLUT.hpp \
+  graphics\tickable.hpp game\sprites\bomb.hpp game\sprites\ninja.hpp \
+  game\compostManager.hpp game\compostPile.hpp graphics\renderedText.hpp \
+  graphics\graphicsController.hpp assets\assets.hpp \
+  game\sprites\knife.hpp game\sprites\knifeTrajectoryMarker.hpp \
+  core\screenManager.hpp inputs\inputArbiter.hpp inputs\inputBase.hpp \
+  game\screens\gameWinScreen.hpp inputs\buttonInput.hpp game\inputs.hpp \
+  inputs\joystickInput.hpp globals.hpp

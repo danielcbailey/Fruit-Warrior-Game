@@ -48,12 +48,33 @@ extern BitmapImage knife_7;
 
 //backgrounds
 extern BitmapImage backgroundGame_0;
+extern BitmapImage idleBackground_0;
 
 //bomb
 extern BitmapImage bomb_0;
 extern BitmapImage bomb_1;
 extern BitmapImage bomb_2;
 extern BitmapImage bomb_3;
+
+//knife markers
+extern BitmapImage knifeMarker_0;
+extern BitmapImage knifeMarker_1;
+extern BitmapImage knifeMarker_2;
+extern BitmapImage knifeMarker_3;
+
+//characters
+extern BitmapImage* characters[];
+
+//logos
+extern BitmapImage studioLogo_0;
+extern BitmapImage studioLogo_1;
+extern BitmapImage samuraiLogo_0;
+extern BitmapImage samuraiLogo_1;
+extern BitmapImage fruitLogo_0;
+
+//GUI elements
+extern BitmapImage startButton_0;
+extern BitmapImage highScoresButton_0;
 
 //Animations
 extern Animation bomb_animation;
@@ -63,5 +84,7 @@ extern Animation banana_cut_animation;
 extern Animation orange_cut_animation;
 extern Animation kiwi_cut_animation;
 extern Animation lemon_cut_animation;
+
+extern Animation knife_marker_animation;
 
 #endif //ASSETS_INCLUDED

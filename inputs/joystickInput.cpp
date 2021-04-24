@@ -29,6 +29,7 @@ void JoystickInput::poll(float dt) {
 
     float x = this->xPin.read() * 2.0f - 1.0f;
     float y = this->yPin.read() * 2.0f - 1.0f;
+    y = 0 - y;
     event->x = x;
     event->y = y;
     event->prevX = this->previousX;
@@ -85,6 +86,14 @@ void JoystickInput::poll(float dt) {
                 event->direction = JOYSTICK_DOWN;
             }
         }
+    }
+
+    if (this->invertX) {
+        event->x = 0 - event->x;
+    }
+
+    if (!this->invertY) {
+        event->y = 0 - event->y;
     }
 
     //Dispatching event

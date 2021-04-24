@@ -94,7 +94,7 @@ void GraphicsController::renderAllIn(GraphicsElement::RegionOfInfluence roi) {
                             //resample
                             GraphicsElement* temp = GraphicsElement::resampleImage(roi, elem);
                             temp->render(this->lcd); //it is known that it is contained within the ROI
-                            free(temp->getContext()->Image.image->getRawBuffer());
+                            //free(temp->getContext()->Image.image->getRawBuffer());
                             delete(temp->getContext()->Image.image);
                             delete(temp);
                             continue;
@@ -110,6 +110,10 @@ uint16_t GraphicsController::samplePixel(int x, int y, int layerSample) {
     //Not the most efficient method, but iterates the fewest times over the layers list
     //In almost all cases, it will be sampling from the background, so it is well optimized for
     //this use case.
+
+    if (x < 0 || x > 127 || y < 0 || y > 127) {
+        return 0;
+    }
 
     uint16_t ret = 0;
     GraphicsElement::RegionOfInfluence roi = {x, y, x, y};
@@ -148,8 +152,10 @@ void GraphicsController::registerGraphicsElement(GraphicsElement *element) {
 }
 
 void GraphicsController::updateGraphicsElement(GraphicsElement *element) {
-    //Calculating if there is overlap between the new and old location
     GraphicsElement::RegionOfInfluence oldRoi = element->getRenderedROI();
+    GraphicsElement::RegionOfInfluence roi = element->getROI();
+
+    //Calculating if there is overlap between the new and old location
     if (!element->isInROI(oldRoi)) {
         //No overlap, can simply render without the element in the old location and render it in the new location
         renderAllIn(oldRoi);
@@ -163,8 +169,6 @@ void GraphicsController::updateGraphicsElement(GraphicsElement *element) {
 
     //The top/bottom regions extend to the full width of the former ROI, the left/right ones do not extend to the full
     //height of the former ROI
-
-    GraphicsElement::RegionOfInfluence roi = element->getROI();
     GraphicsElement::RegionOfInfluence sideRoi;
     GraphicsElement::RegionOfInfluence tbRoi; //tb for top-bottom roi since I can't think of a single word for it
 
@@ -267,4 +271,8 @@ void GraphicsController::handleGraphicsTick(float dt) {
 
         this->updateGraphicsElement(elem);
     }
+}
+
+void GraphicsController::refresh() {
+    this->renderAllIn(this->globalBoundary);
 }

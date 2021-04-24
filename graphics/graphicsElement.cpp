@@ -86,7 +86,11 @@ bool GraphicsElement::sample(int x, int y, uint16_t *color) {
     return false;
 }
 
-void GraphicsElement::render(uLCD* lcd) {
+void GraphicsElement::render(uLCD *lcd) {
+    this->renderWithin(lcd, _globalGraphics->getGlobalBoundary());
+}
+
+void GraphicsElement::renderRaw(uLCD* lcd) {
     switch (this->elementType) {
     case ELEMENT_RECT:
         if (this->context.Rectangle.isFilled) {
@@ -117,32 +121,9 @@ void GraphicsElement::render(uLCD* lcd) {
     case ELEMENT_IMAGE:
         {
             //Cannot render images outside of the screen area, must resample any sprites that go outside
-            //the screen area
+            //the screen area. However, this has already been done by renderWithin so it can just be rendered.
 
-            bool valid;
-            RegionOfInfluence tempROI = adjustROIToScreen(this->getROI(), &valid);
-
-            if (!ROIEquals(tempROI, this->getROI())) {
-                //An adjustment had to be taken, so the image must be resampled to fit the new
-                //ROI.
-                if (this->context.Image.image->getHeight() * this->context.Image.image->getWidth() > 2048) {
-                    //Cannot resample
-                    printfdbg("Image too large to resample from outside screen boundaries.\n");
-                    return;
-                }
-                
-                GraphicsElement* tempElem = resampleImage(tempROI, this);
-                tempElem->render(lcd);
-                free(tempElem->getContext()->Image.image->getRawBuffer());
-                delete(tempElem->getContext()->Image.image);
-                delete(tempElem);
-            } else {
-                lcd->setClippingWindow(0, 8, 128, 120);
-                this->context.Image.image->render(lcd, this->context.Image.x, this->context.Image.y, this->context.Image.layer);
-                lcd->setClippingWindow(0, 0, 0, 0);
-            }
-
-            
+            this->context.Image.image->render(lcd, this->context.Image.x, this->context.Image.y, this->context.Image.layer);
         }
         
         break;
@@ -155,10 +136,27 @@ void GraphicsElement::renderWithin(uLCD* lcd, RegionOfInfluence roi) {
     //not really concerned with maximum performance as much as not needing to rerender each thing
     //that intersects the roi of the element just rerendered.
 
-    //The screen's clipping engine is garbage, I will need to write a software clipping engine
-    //lcd->setClippingWindow(roi.x, roi.y, roi.x2 - roi.x + 1, roi.y2 - roi.y + 1);
-    this->render(lcd);
-    //lcd->setClippingWindow(0, 0, 0, 0); //disabling clipping
+    if (!this->isInROI(roi)) {
+        //it isn't even in the region, so toss it
+        return;
+    }
+
+    RegionOfInfluence intersection = intersectROIs(roi, this->getROI());
+    intersection = intersectROIs(intersection, _globalGraphics->getGlobalBoundary());
+
+    if (this->elementType == ELEMENT_IMAGE &&
+        !ROIEquals(intersection, this->getROI()) &&
+        this->context.Image.width * this->context.Image.height <= 2048) {
+        //will software clip it to the region
+
+        GraphicsElement* tempElem = resampleImage(intersection, this);
+        tempElem->renderRaw(lcd);
+        //free(tempElem->getContext()->Image.image->getRawBuffer()); no longer needed
+        delete(tempElem->getContext()->Image.image);
+        delete(tempElem);
+    } else {
+        this->renderRaw(lcd);
+    }
 }
 
 int GraphicsElement::getLayer() {
@@ -286,32 +284,8 @@ GraphicsElement* GraphicsElement::resampleImage(GraphicsElement::RegionOfInfluen
     //samples the image over the given roi
     //if the roi extends beyond the boundaries of the image, it simply generates an image of what it can
 
-    GraphicsElement::RegionOfInfluence bounds;
+    GraphicsElement::RegionOfInfluence bounds = intersectROIs(roi, img->getROI());
     GraphicsElement* ret = new GraphicsElement(GraphicsElement::ELEMENT_IMAGE, {.Image={}});
-
-    if (roi.x < img->getContext()->Image.x) {
-        bounds.x = img->getContext()->Image.x;
-    } else {
-        bounds.x = roi.x;
-    }
-
-    if (roi.y < img->getContext()->Image.y) {
-        bounds.y = img->getContext()->Image.y;
-    } else {
-        bounds.y = roi.y;
-    }
-
-    if (roi.x2 > img->getContext()->Image.x + img->getContext()->Image.width - 1) {
-        bounds.x2 = img->getContext()->Image.x + img->getContext()->Image.width - 1;
-    } else {
-        bounds.x2 = roi.x2;
-    }
-
-    if (roi.y2 > img->getContext()->Image.y + img->getContext()->Image.height - 1) {
-        bounds.y2 = img->getContext()->Image.y + img->getContext()->Image.height - 1;
-    } else {
-        bounds.y2 = roi.y2;
-    }
 
     ret->getContext()->Image.x = bounds.x;
     ret->getContext()->Image.y = bounds.y;
@@ -319,7 +293,8 @@ GraphicsElement* GraphicsElement::resampleImage(GraphicsElement::RegionOfInfluen
     ret->getContext()->Image.height = bounds.y2 - bounds.y + 1;
     ret->getContext()->Image.layer = img->getLayer();
 
-    uint16_t* buf = (uint16_t*)malloc(sizeof(uint16_t) * ret->getContext()->Image.height * ret->getContext()->Image.width);
+    uint16_t* buf = (uint16_t*)malloc_safe(sizeof(uint16_t) * ret->getContext()->Image.height * ret->getContext()->Image.width);
+    printMalloc(buf);
 
     uint16_t* bufP = buf;
 
@@ -336,6 +311,35 @@ GraphicsElement* GraphicsElement::resampleImage(GraphicsElement::RegionOfInfluen
     }
 
     ret->getContext()->Image.image = new BitmapImage((uint8_t*)buf, ret->getContext()->Image.width, ret->getContext()->Image.height, nullptr);
+
+    return ret;
+}
+
+GraphicsElement::RegionOfInfluence GraphicsElement::intersectROIs(RegionOfInfluence r1, RegionOfInfluence r2) {
+    RegionOfInfluence ret;
+    if (r1.x < r2.x) {
+        ret.x = r2.x;
+    } else {
+        ret.x = r1.x;
+    }
+
+    if (r1.y < r2.y) {
+        ret.y = r2.y;
+    } else {
+        ret.y = r1.y;
+    }
+
+    if (r1.x2 > r2.x2) {
+        ret.x2 = r2.x2;
+    } else {
+        ret.x2 = r1.x2;
+    }
+
+    if (r1.y2 > r2.y2) {
+        ret.y2 = r2.y2;
+    } else {
+        ret.y2 = r1.y2;
+    }
 
     return ret;
 }

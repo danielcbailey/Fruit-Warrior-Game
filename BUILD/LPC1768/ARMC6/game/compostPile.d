@@ -149,11 +149,13 @@ BUILD\LPC1768\ARMC6\game\compostPile.o: game\compostPile.cpp \
   mbed-os\platform\include\platform\ScopedRamExecutionLock.h \
   mbed-os\platform\include\platform\mbed_stats.h \
   mbed-os\platform\include\platform\Stream.h \
-  mbed-os\platform\include\platform\FileLike.h \
-  graphics\graphicsController.hpp graphics\animationPlayer.hpp \
-  graphics\animation.hpp graphics\bitmapImage.hpp graphics\colorLUT.hpp \
+  mbed-os\platform\include\platform\FileLike.h hardware\serialAsync.hpp \
+  hardware\dma.h graphics\graphicsController.hpp \
+  graphics\animationPlayer.hpp graphics\animation.hpp \
+  graphics\bitmapImage.hpp graphics\colorLUT.hpp \
   game\screens\gamePlayScreen.hpp core\gameScreen.hpp \
   game\fruitManager.hpp game\sprites\sliceable.hpp graphics\sprite.hpp \
   graphics\tickable.hpp game\sprites\bomb.hpp game\sprites\ninja.hpp \
-  game\compostManager.hpp core\screenManager.hpp inputs\inputArbiter.hpp \
-  inputs\inputBase.hpp game\screens\gameOverScreen.hpp
+  game\compostManager.hpp graphics\renderedText.hpp \
+  core\screenManager.hpp inputs\inputArbiter.hpp inputs\inputBase.hpp \
+  game\screens\gameOverScreen.hpp

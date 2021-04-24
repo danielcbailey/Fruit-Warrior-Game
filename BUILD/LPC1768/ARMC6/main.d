@@ -148,13 +148,31 @@ BUILD\LPC1768\ARMC6\main.o: main.cpp BUILD\LPC1768\ARMC6\mbed_config.h \
   mbed-os\platform\include\platform\mbed_stats.h \
   mbed-os\platform\include\platform\Stream.h \
   mbed-os\platform\include\platform\FileLike.h graphics\bitmapImage.hpp \
-  graphics\colorLUT.hpp graphics\uLCD.hpp graphics\graphicsElement.hpp \
+  graphics\colorLUT.hpp graphics\uLCD.hpp hardware\serialAsync.hpp \
+  hardware\dma.h graphics\graphicsElement.hpp \
   graphics\graphicsController.hpp graphics\animationPlayer.hpp \
   graphics\animation.hpp assets\assets.hpp globals.hpp \
   game\sprites\bomb.hpp graphics\sprite.hpp graphics\tickable.hpp \
   graphics\gameTick.hpp core\screenManager.hpp core\gameScreen.hpp \
-  inputs\inputArbiter.hpp inputs\inputBase.hpp \
-  game\screens\titleScreen.hpp game\inputs.hpp inputs\joystickInput.hpp \
-  inputs\buttonInput.hpp game\screens\gamePlayScreen.hpp \
-  game\fruitManager.hpp game\sprites\sliceable.hpp \
-  game\sprites\ninja.hpp game\compostManager.hpp game\compostPile.hpp
+  inputs\inputArbiter.hpp inputs\inputBase.hpp core\files.hpp \
+  mbed-os\storage\blockdevice\COMPONENT_SD\include\SD\SDBlockDevice.h \
+  mbed-os\hal\include\hal\static_pinmap.h \
+  mbed-os\hal\include\hal\spi_api.h mbed-os\hal\include\hal\pwmout_api.h \
+  mbed-os\hal\include\hal\analogin_api.h \
+  mbed-os\hal\include\hal\analogout_api.h \
+  mbed-os\hal\include\hal\i2c_api.h mbed-os\hal\include\hal\serial_api.h \
+  mbed-os\hal\include\hal\qspi_api.h mbed-os\hal\include\hal\ospi_api.h \
+  mbed-os\hal\include\hal\can_api.h \
+  mbed-os\storage\filesystem\fat\include\fat\FATFileSystem.h \
+  mbed-os\platform\include\platform\FileHandle.h \
+  mbed-os\platform\include\platform\PlatformMutex.h \
+  mbed-os\storage\filesystem\fat\ChaN\ff.h \
+  mbed-os\storage\filesystem\fat\ChaN\integer.h \
+  mbed-os\storage\filesystem\fat\ChaN\ffconf.h \
+  game\screens\titleScreen.hpp game\fruitManager.hpp \
+  game\sprites\sliceable.hpp game\inputs.hpp inputs\joystickInput.hpp \
+  inputs\buttonInput.hpp game\screens\introScreen.hpp \
+  game\screens\gamePlayScreen.hpp game\sprites\ninja.hpp \
+  game\compostManager.hpp game\compostPile.hpp graphics\renderedText.hpp \
+  audio\audioPlayer.hpp core\files.hpp hardware\analogOutAsync.hpp \
+  audio\audioManager.hpp

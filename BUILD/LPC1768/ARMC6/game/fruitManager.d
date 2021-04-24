@@ -150,11 +150,12 @@ BUILD\LPC1768\ARMC6\game\fruitManager.o: game\fruitManager.cpp \
   mbed-os\platform\include\platform\ScopedRamExecutionLock.h \
   mbed-os\platform\include\platform\mbed_stats.h \
   mbed-os\platform\include\platform\Stream.h \
-  mbed-os\platform\include\platform\FileLike.h \
-  graphics\animationPlayer.hpp graphics\animation.hpp \
+  mbed-os\platform\include\platform\FileLike.h hardware\serialAsync.hpp \
+  hardware\dma.h graphics\animationPlayer.hpp graphics\animation.hpp \
   graphics\bitmapImage.hpp graphics\colorLUT.hpp graphics\tickable.hpp \
   game\sprites\bomb.hpp graphics\gameTick.hpp core\screenManager.hpp \
   core\gameScreen.hpp inputs\inputArbiter.hpp inputs\inputBase.hpp \
   game\screens\gameOverScreen.hpp game\screens\gamePlayScreen.hpp \
   game\sprites\ninja.hpp game\compostManager.hpp game\compostPile.hpp \
+  graphics\renderedText.hpp graphics\graphicsController.hpp \
   assets\assets.hpp globals.hpp

@@ -11,5 +11,6 @@ void registerInputs();
 extern JoystickInput* _joystick;
 extern InputArbiter* _inputArbiter;
 extern ButtonInput* _button1;
+extern ButtonInput* _button2;
 
 #endif //INPUTS_INCLUDED

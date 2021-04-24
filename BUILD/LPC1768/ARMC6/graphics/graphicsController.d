@@ -149,7 +149,7 @@ BUILD\LPC1768\ARMC6\graphics\graphicsController.o: \
   mbed-os\platform\include\platform\ScopedRamExecutionLock.h \
   mbed-os\platform\include\platform\mbed_stats.h \
   mbed-os\platform\include\platform\Stream.h \
-  mbed-os\platform\include\platform\FileLike.h \
-  graphics\graphicsElement.hpp graphics\animationPlayer.hpp \
-  graphics\animation.hpp graphics\bitmapImage.hpp graphics\colorLUT.hpp \
-  globals.hpp
+  mbed-os\platform\include\platform\FileLike.h hardware\serialAsync.hpp \
+  hardware\dma.h graphics\graphicsElement.hpp \
+  graphics\animationPlayer.hpp graphics\animation.hpp \
+  graphics\bitmapImage.hpp graphics\colorLUT.hpp globals.hpp

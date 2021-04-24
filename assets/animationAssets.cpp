@@ -19,3 +19,6 @@ Animation kiwi_cut_animation = Animation(kiwi_cut_animation_frames, 2);
 
 BitmapImage* lemon_cut_animation_frames[] = {&lemon_1, &lemon_2};
 Animation lemon_cut_animation = Animation(lemon_cut_animation_frames, 2);
+
+BitmapImage* knife_marker_animation_frames[] = {&knifeMarker_0, &knifeMarker_1, &knifeMarker_2, &knifeMarker_3};
+Animation knife_marker_animation = Animation(knife_marker_animation_frames, 4);

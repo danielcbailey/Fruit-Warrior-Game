@@ -84,6 +84,8 @@ class GraphicsElement {
 
     void render(uLCD* lcd);
 
+    void renderRaw(uLCD* lcd);
+
     void renderWithin(uLCD* lcd, RegionOfInfluence roi);
 
     int getLayer();
@@ -101,6 +103,8 @@ class GraphicsElement {
     static RegionOfInfluence adjustROIToScreen(RegionOfInfluence roi, bool* isValid);
 
     static GraphicsElement* resampleImage(GraphicsElement::RegionOfInfluence roi, GraphicsElement* img);
+
+    static RegionOfInfluence intersectROIs(RegionOfInfluence r1, RegionOfInfluence r2);
 };
 
 #endif //GRAPHICS_ELEMENT_INCLUDED

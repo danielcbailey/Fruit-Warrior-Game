@@ -37,7 +37,8 @@ void BitmapImage::render(uLCD* lcd, int xs, int ys, int layer) {
 
     if (this->lut != nullptr) {
         //Must generate a temporary buffer for the blit process
-        uint16_t* blitBuf = (uint16_t*)malloc(this->width * this->height * 2);
+        uint16_t* blitBuf = (uint16_t*)malloc_safe(this->width * this->height * 2);
+        printMalloc(blitBuf);
 
         uint16_t* bufSeeker = blitBuf;
         uint8_t* imgSeeker = this->bitmap;
@@ -53,11 +54,10 @@ void BitmapImage::render(uLCD* lcd, int xs, int ys, int layer) {
             }
         }
 
-        lcd->BLIT(xs, ys, this->width, this->height, blitBuf);
-        free(blitBuf);
+        lcd->BLIT(xs, ys, this->width, this->height, blitBuf, true);
     } else {
         //Just has to call the blit function since no color conversion is needed
-        lcd->BLIT(xs, ys, this->width, this->height, (uint16_t*)this->bitmap);
+        lcd->BLIT(xs, ys, this->width, this->height, (uint16_t*)this->bitmap, this->width * this->height <= 4096);
     }
 }
 

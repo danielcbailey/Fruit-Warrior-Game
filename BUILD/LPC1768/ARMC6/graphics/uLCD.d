@@ -148,4 +148,5 @@ BUILD\LPC1768\ARMC6\graphics\uLCD.o: graphics\uLCD.cpp \
   mbed-os\platform\include\platform\ScopedRamExecutionLock.h \
   mbed-os\platform\include\platform\mbed_stats.h \
   mbed-os\platform\include\platform\Stream.h \
-  mbed-os\platform\include\platform\FileLike.h globals.hpp
+  mbed-os\platform\include\platform\FileLike.h hardware\serialAsync.hpp \
+  hardware\dma.h globals.hpp

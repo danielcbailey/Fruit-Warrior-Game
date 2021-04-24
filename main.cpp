@@ -24,29 +24,49 @@
 #include "graphics/gameTick.hpp"
 
 #include "core/screenManager.hpp"
+#include "core/files.hpp"
+#include "SDBlockDevice.h"
+#include "FATFileSystem.h"
 #include "screens/titleScreen.hpp"
 
 #include "game/inputs.hpp"
+#include "screens/introScreen.hpp"
 
-UnbufferedSerial pc(USBTX, USBRX, 9600);
+UnbufferedSerial pc(USBTX, USBRX, 115200);
 
 //ScreenManager _screenManager(&_titleScreen);
 
 //Testing:
 #include "screens/gamePlayScreen.hpp"
+#include "audio/audioPlayer.hpp"
+#include "audio/audioManager.hpp"
 
-ScreenManager _screenManager(&_gamePlayScreen);
+#include "serialAsync.hpp"
+
+ScreenManager _screenManager(&_introScreen);
 //End testing
 
 int main() {
-    //Initializing the graphics
-
     //Adding inputs
     registerInputs();
 
+    //Creating the global file system
+    SDBlockDevice sdCard(p5, p6, p7, p8, 12000000);
+
+    _globalFileSystem = new FATFileSystem("fs", &sdCard);
+
+    AudioManager audioMgr;
+
     uLCD lcd(P0_15, P0_16, p25, uLCD::BAUD_1500000);
 
+    //Testing audio system
+
+    AudioPlayer test("titleScreen.wav");
+
+    test.play(200);
+
     GraphicsController controller(&lcd);
+    controller.setGlobalBoundary({0, 0, 127, 127});
 
     //Starting the game
     _screenManager.gameStart();
@@ -56,6 +76,7 @@ int main() {
 
     while (true) {
         _screenManager.onMainLoop();
+       // _audioManager->updateBuffers(); // Repeated here in case the display doesn't have an update in several frames
         
         if ((int)_screenManager.getTotalTime() % 10 == 9) {
             if (!reportedFps) {
@@ -67,3 +88,5 @@ int main() {
         }
     }
 }
+
+FileSystem* _globalFileSystem;

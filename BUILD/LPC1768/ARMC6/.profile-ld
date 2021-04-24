@@ -20,6 +20,7 @@
     "macros": [],
     "symbols": [
         "ARM_MATH_CM3",
+        "COMPONENT_SD=1",
         "DEVICE_ANALOGIN=1",
         "DEVICE_ANALOGOUT=1",
         "DEVICE_CAN=1",
@@ -48,7 +49,7 @@
         "DEVICE_USBDEVICE=1",
         "DEVICE_USTICKER=1",
         "DEVICE_WATCHDOG=1",
-        "MBED_BUILD_TIMESTAMP=1618074724.704117",
+        "MBED_BUILD_TIMESTAMP=1619149889.8209271",
         "TARGET_CORTEX",
         "TARGET_CORTEX_M",
         "TARGET_LIKE_CORTEX_M3",

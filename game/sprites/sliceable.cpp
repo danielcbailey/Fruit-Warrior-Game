@@ -5,6 +5,8 @@
 #include "globals.hpp"
 #include "game/compostManager.hpp"
 
+bool _sliceablePlayMode = false;
+
 Sliceable::Sliceable(float bearing, float vel, int points, int x0, int y0,
               Animation* cutAnimation, BitmapImage* image) :
               bearing(bearing), vel(vel), points(points) {
@@ -22,7 +24,7 @@ void Sliceable::onGameTick(float dt) {
     float x = this->getX() + cos(this->bearing) * this->vel * dt;
     float y = this->getY() + sin(this->bearing) * this->vel * dt;
 
-    if (!this->isCut && _gamePlayScreen.getCompostManager()->testCollision(this->getX() + 5, this->getY() + 5, 8)) {
+    if (_sliceablePlayMode && !this->isCut && _gamePlayScreen.getCompostManager()->testCollision(this->getX() + 5, this->getY() + 5, 8)) {
         //Hit a compost pile
         this->removable = true;
     }
@@ -45,9 +47,12 @@ void Sliceable::onGameTick(float dt) {
 }
 
 void Sliceable::cut() {
-        if (this->isCut) return;
-        this->isCut = true;
-        this->enableAnimation();
+    if (this->isCut) return;
+    this->isCut = true;
+    this->enableAnimation();
 
-        _gamePlayScreen.setScore(_gamePlayScreen.getScore() + this->points);
+    if (_sliceablePlayMode) {
+        _gamePlayScreen.setScore(_gamePlayScreen.getScore() + this->points * _gamePlayScreen.getComboMultiplier());
+        _gamePlayScreen.setComboMultiplier(_gamePlayScreen.getComboMultiplier() + 1);
     }
+}

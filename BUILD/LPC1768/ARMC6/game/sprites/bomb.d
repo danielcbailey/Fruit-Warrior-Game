@@ -149,7 +149,7 @@ BUILD\LPC1768\ARMC6\game\sprites\bomb.o: game\sprites\bomb.cpp \
   mbed-os\platform\include\platform\ScopedRamExecutionLock.h \
   mbed-os\platform\include\platform\mbed_stats.h \
   mbed-os\platform\include\platform\Stream.h \
-  mbed-os\platform\include\platform\FileLike.h \
-  graphics\animationPlayer.hpp graphics\animation.hpp \
+  mbed-os\platform\include\platform\FileLike.h hardware\serialAsync.hpp \
+  hardware\dma.h graphics\animationPlayer.hpp graphics\animation.hpp \
   graphics\bitmapImage.hpp graphics\colorLUT.hpp graphics\tickable.hpp \
   assets\assets.hpp game\sprites\sliceable.hpp globals.hpp

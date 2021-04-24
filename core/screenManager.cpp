@@ -10,13 +10,12 @@ ScreenManager::ScreenManager(GameScreen* initialScreen) {
     this->currentScreen = initialScreen;
     this->requestedScreen = nullptr;
 
-    for (int i = 0; 5 > i; i++) {
-        this->frameTimes[i] = 0;
-    }
-
     this->fps = 0;
-    this->currentFpsIndex = 0;
+    this->frameCount = 0;
+    this->deltaFrames = 0;
     this->previousTime = 0;
+    this->prevTotalTime = 0;
+    this->paused = false;
 }
 
 void ScreenManager::gameStart() {
@@ -43,16 +42,16 @@ void ScreenManager::onMainLoop() {
     this->totalTime += dt;
 
     //Updating frame rate information
-    this->frameTimes[this->currentFpsIndex] = dt;
+    this->frameCount++;
+    this->deltaFrames++;
 
-    float fpsTotalTime = 0;
-    for (int i = 0; 5 > i; i++) {
-        fpsTotalTime += this->frameTimes[i];
+    if ((int) this->totalTime != (int)this->previousTime) {
+        //Roughly one second has passed
+        this->fps = this->deltaFrames / (this->totalTime - this->prevTotalTime);
+
+        this->prevTotalTime = totalTime;
+        this->deltaFrames = 0;
     }
-
-    this->fps = 5.0f / fpsTotalTime;
-
-    this->currentFpsIndex = (this->currentFpsIndex + 1) % 5;
 
     //Polling for inputs
     _inputArbiter->pollInputs(dt);
@@ -62,8 +61,12 @@ void ScreenManager::onMainLoop() {
     //processed. For example, processing an input before the tickable acts.
     //Most events should be handled by tickable, so the game loop is provided as
     //an option but is by no means mandatory to have it do something meaningful.
+    this->currentScreen->incrementTime(dt);
     this->currentScreen->onGameLoop(dt);
 
     //Now dispatching tickable events and dispatching animation ticks
-    _tickManager.dispatchGameTick(dt);
+    if (!this->paused) {
+        //Game ticks get suspended while paused.
+        _tickManager.dispatchGameTick(dt);
+    }
 }

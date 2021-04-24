@@ -32,6 +32,7 @@
     "macros": [],
     "symbols": [
         "ARM_MATH_CM3",
+        "COMPONENT_SD=1",
         "DEVICE_ANALOGIN=1",
         "DEVICE_ANALOGOUT=1",
         "DEVICE_CAN=1",

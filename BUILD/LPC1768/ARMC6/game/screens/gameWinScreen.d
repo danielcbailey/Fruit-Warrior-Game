@@ -150,10 +150,11 @@ BUILD\LPC1768\ARMC6\game\screens\gameWinScreen.o: \
   mbed-os\platform\include\platform\ScopedRamExecutionLock.h \
   mbed-os\platform\include\platform\mbed_stats.h \
   mbed-os\platform\include\platform\Stream.h \
-  mbed-os\platform\include\platform\FileLike.h \
-  graphics\graphicsElement.hpp graphics\animationPlayer.hpp \
-  graphics\animation.hpp graphics\bitmapImage.hpp graphics\colorLUT.hpp \
+  mbed-os\platform\include\platform\FileLike.h hardware\serialAsync.hpp \
+  hardware\dma.h graphics\graphicsElement.hpp \
+  graphics\animationPlayer.hpp graphics\animation.hpp \
+  graphics\bitmapImage.hpp graphics\colorLUT.hpp \
   game\screens\gamePlayScreen.hpp game\fruitManager.hpp \
   game\sprites\sliceable.hpp graphics\sprite.hpp graphics\tickable.hpp \
   game\sprites\bomb.hpp game\sprites\ninja.hpp game\compostManager.hpp \
-  game\compostPile.hpp
+  game\compostPile.hpp graphics\renderedText.hpp

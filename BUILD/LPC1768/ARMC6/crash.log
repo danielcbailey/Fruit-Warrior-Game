@@ -1,0 +1,46 @@
+++ MbedOS Fault Handler ++
+
+FaultType: HardFault
+
+Context:
+R0   : 00000016
+R1   : 052CFFF0
+R2   : 00000006
+R3   : 10001584
+R4   : 00000010
+R5   : 100009B0
+R6   : 0000000C
+R7   : 0000002E
+R8   : 00000005
+R9   : 10007D88
+R10  : 0000002E
+R11  : 10000F30
+R12  : 00000000
+SP   : 10007CF0
+LR   : 0000055D
+PC   : 00000592
+xPSR : 21000000
+PSP  : 0FEDC15C
+MSP  : 10007CD0
+CPUID: 412FC230
+HFSR : 40000000
+MMFSR: 00000000
+BFSR : 00000004
+UFSR : 00000000
+DFSR : 00000000
+AFSR : 00000000
+Mode : Thread
+Priv : Privileged
+Stack: MSP
+
+-- MbedOS Fault Handler --
+
+
+
+++ MbedOS Error Info ++
+Error Status: 0x80FF013D Code: 317 Module: 255
+Error Message: Fault exception
+Location: 0x592
+Error Value: 0x100007EC
+For more info, visit: https://mbed.com/s/error?error=0x80FF013D&tgt=LPC1768
+-- MbedOS Error Info --

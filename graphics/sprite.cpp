@@ -38,12 +38,19 @@ Sprite::~Sprite() {
 }
 
 void Sprite::setPos(float x, float y) {
+    int oldX = this->x;
+    int oldY = this->y;
     this->getContext()->Image.x = x;
     this->getContext()->Image.y = y;
     this->x = x;
     this->y = y;
 
     if (!this->registered || this->hidden) {
+        return;
+    }
+
+    if (oldX == (int)x && oldY == (int)y) {
+        //Same position, can skip update
         return;
     }
 
@@ -64,6 +71,7 @@ void Sprite::setImage(BitmapImage* image) {
     this->getContext()->Image.height = image->getHeight();
 
     if (hidden) {
+        this->registered = true;
         return;
     }
     if (!this->registered) {
@@ -79,6 +87,7 @@ void Sprite::setImage(BitmapImage* image) {
 void Sprite::enableAnimation() {
     if (hidden) {
         this->animationRegistered = true;
+        this->registered = true;
         return;
     }
 
@@ -106,7 +115,11 @@ void Sprite::disableAnimation() {
 }
 
 void Sprite::show() {
+    if (!this->hidden) {
+        return;
+    }
     if (!this->registered) {
+        this->hidden = false;
         return;
     }
 
@@ -115,9 +128,14 @@ void Sprite::show() {
     if (this->animationRegistered) {
         _globalGraphics->registerAnimation(&this->animation);
     }
+
+    this->hidden = false;
 }
 
 void Sprite::hide() {
+    if (this->hidden) {
+        return;
+    }
     if (this->animationRegistered) {
         //must remove the animation prior to hiding
         _globalGraphics->removeAnimation(&this->animation);
