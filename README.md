@@ -20,7 +20,7 @@ This software will *only* work with the mbed LPC 1768, and below are detailed th
 * The analogOutAsync class (hardware/analogOutAsync.hpp) assumes there is only one analog out pin, this would need to be reworked to accomodate devices with more than one.
 
 ### Runtime Requirements
-As mentioned in [Hardware Overview](readme.md#Hardware%20Overview), the game requires that those peripherals are connected properly. However, the game also requires the SD Card to have some specific content.
+As mentioned in Hardware Overview, the game requires that those peripherals are connected properly. However, the game also requires the SD Card to have some specific content.
 The game expects the following files to be on the SD card and will not run without them:
 * highScores.csv - A CSV file with high scores. Should have a header with the fields "name" and "score", and 5 rows of entries below. If an entry is not present yet, it should be left blank but still present in the CSV.
 * sounds/gameplay1.wav - A PCM sampled WAVE file for the last track in the gameplay loop
