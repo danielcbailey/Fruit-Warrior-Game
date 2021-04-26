@@ -23,7 +23,7 @@ void GameOverScreen::onCreation() {
         lcd->locate(0, 5);
         lcd->printf("Your score rank:");
         lcd->locate(8, 6);
-        lcd->printf("%d", _gamePlayScreen.getScore());
+        lcd->printf("%d", pos);
         lcd->locate(0, 7);
         lcd->printf("Type your name:");
 
