@@ -4,6 +4,7 @@
 #include "graphics/gameTick.hpp"
 #include "game/inputs.hpp"
 #include "globals.hpp"
+#include "game/soundManager.hpp"
 
 ScreenManager::ScreenManager(GameScreen* initialScreen) {
     this->totalTime = 0;
@@ -69,4 +70,7 @@ void ScreenManager::onMainLoop() {
         //Game ticks get suspended while paused.
         _tickManager.dispatchGameTick(dt);
     }
+
+    //Checking for music updates
+    _soundManager.checkMusicChange();
 }

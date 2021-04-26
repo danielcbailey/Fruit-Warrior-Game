@@ -50,7 +50,7 @@ void AudioManager::onAudioTick() {
 
             this->players.remove(*pIt);
 
-            continue;
+            break;
         }
 
         ++itr;

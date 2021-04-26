@@ -157,5 +157,8 @@ BUILD\LPC1768\ARMC6\game\screens\introScreen.o: \
   game\screens\titleScreen.hpp game\fruitManager.hpp \
   game\sprites\sliceable.hpp graphics\sprite.hpp \
   graphics\animationPlayer.hpp graphics\tickable.hpp \
-  game\sprites\bomb.hpp graphics\graphicsController.hpp \
-  graphics\colors.hpp globals.hpp
+  game\sprites\bomb.hpp game\guiButton.hpp game\inputs.hpp \
+  inputs\joystickInput.hpp inputs\buttonInput.hpp \
+  graphics\renderedText.hpp graphics\graphicsController.hpp \
+  graphics\colors.hpp game\soundManager.hpp audio\audioPlayer.hpp \
+  core\files.hpp hardware\analogOutAsync.hpp globals.hpp

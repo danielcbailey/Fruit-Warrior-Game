@@ -2,10 +2,10 @@
     {
         "module": "[lib]\\c_w.l",
         "size": {
-            ".text": 11817,
+            ".text": 12107,
             ".data": 12,
             ".bss": 552,
-            ".text-delta": 0,
+            ".text-delta": -20,
             ".data-delta": 0,
             ".bss-delta": 0
         }
@@ -24,10 +24,10 @@
     {
         "module": "[lib]\\libcpp_w.l",
         "size": {
-            ".text": 2008,
+            ".text": 3024,
             ".data": 0,
             ".bss": 0,
-            ".text-delta": 0,
+            ".text-delta": -446,
             ".data-delta": 0,
             ".bss-delta": 0
         }
@@ -70,6 +70,17 @@
         "size": {
             ".text": 0,
             ".data": 128,
+            ".bss": 0,
+            ".text-delta": 0,
+            ".data-delta": 0,
+            ".bss-delta": 0
+        }
+    },
+    {
+        "module": "assets\\backButton.o",
+        "size": {
+            ".text": 486,
+            ".data": 24,
             ".bss": 0,
             ".text-delta": 0,
             ".data-delta": 0,
@@ -125,6 +136,17 @@
         "size": {
             ".text": 2198,
             ".data": 304,
+            ".bss": 0,
+            ".text-delta": 0,
+            ".data-delta": 0,
+            ".bss-delta": 0
+        }
+    },
+    {
+        "module": "assets\\highScoreText.o",
+        "size": {
+            ".text": 1959,
+            ".data": 24,
             ".bss": 0,
             ".text-delta": 0,
             ".data-delta": 0,
@@ -222,7 +244,7 @@
     {
         "module": "audio\\audioManager.o",
         "size": {
-            ".text": 1243,
+            ".text": 1269,
             ".data": 0,
             ".bss": 4,
             ".text-delta": 0,
@@ -233,7 +255,7 @@
     {
         "module": "audio\\audioPlayer.o",
         "size": {
-            ".text": 674,
+            ".text": 754,
             ".data": 0,
             ".bss": 0,
             ".text-delta": 0,
@@ -244,7 +266,7 @@
     {
         "module": "core\\screenManager.o",
         "size": {
-            ".text": 360,
+            ".text": 366,
             ".data": 0,
             ".bss": 0,
             ".text-delta": 0,
@@ -286,6 +308,28 @@
         }
     },
     {
+        "module": "game\\guiButton.o",
+        "size": {
+            ".text": 912,
+            ".data": 0,
+            ".bss": 0,
+            ".text-delta": 0,
+            ".data-delta": 0,
+            ".bss-delta": 0
+        }
+    },
+    {
+        "module": "game\\highscore.o",
+        "size": {
+            ".text": 598,
+            ".data": 0,
+            ".bss": 4,
+            ".text-delta": -106,
+            ".data-delta": 0,
+            ".bss-delta": 0
+        }
+    },
+    {
         "module": "game\\inputs.o",
         "size": {
             ".text": 130,
@@ -299,9 +343,9 @@
     {
         "module": "game\\keyboard.o",
         "size": {
-            ".text": 92,
+            ".text": 3710,
             ".data": 0,
-            ".bss": 12,
+            ".bss": 21,
             ".text-delta": 0,
             ".data-delta": 0,
             ".bss-delta": 0
@@ -310,10 +354,21 @@
     {
         "module": "game\\screens",
         "size": {
-            ".text": 3015,
-            ".data": 120,
+            ".text": 4693,
+            ".data": 140,
             ".bss": 0,
-            ".text-delta": 16,
+            ".text-delta": 0,
+            ".data-delta": 0,
+            ".bss-delta": 0
+        }
+    },
+    {
+        "module": "game\\soundManager.o",
+        "size": {
+            ".text": 410,
+            ".data": 24,
+            ".bss": 0,
+            ".text-delta": 0,
             ".data-delta": 0,
             ".bss-delta": 0
         }
@@ -321,7 +376,7 @@
     {
         "module": "game\\sprites",
         "size": {
-            ".text": 2646,
+            ".text": 2713,
             ".data": 0,
             ".bss": 1,
             ".text-delta": 0,
@@ -376,7 +431,7 @@
     {
         "module": "graphics\\graphicsController.o",
         "size": {
-            ".text": 2338,
+            ".text": 2380,
             ".data": 0,
             ".bss": 4,
             ".text-delta": 0,
@@ -420,7 +475,7 @@
     {
         "module": "graphics\\uLCD.o",
         "size": {
-            ".text": 1758,
+            ".text": 1966,
             ".data": 0,
             ".bss": 0,
             ".text-delta": 0,
@@ -475,7 +530,7 @@
     {
         "module": "inputs\\inputBase.o",
         "size": {
-            ".text": 496,
+            ".text": 172,
             ".data": 0,
             ".bss": 0,
             ".text-delta": 0,
@@ -497,7 +552,7 @@
     {
         "module": "main.o",
         "size": {
-            ".text": 392,
+            ".text": 368,
             ".data": 0,
             ".bss": 184,
             ".text-delta": 0,
@@ -572,11 +627,22 @@
         }
     },
     {
+        "module": "util\\csv.o",
+        "size": {
+            ".text": 1543,
+            ".data": 0,
+            ".bss": 0,
+            ".text-delta": -1411,
+            ".data-delta": 0,
+            ".bss-delta": 0
+        }
+    },
+    {
         "summary": {
-            "static_ram": 9002,
+            "static_ram": 9107,
             "static_ram_delta": 0,
-            "total_flash": 170369,
-            "total_flash_delta": 16
+            "total_flash": 183052,
+            "total_flash_delta": -1983
         }
     }
 ]

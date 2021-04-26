@@ -2,6 +2,7 @@
 
 #include <cstdio>
 #include "mbed.h"
+#include <string>
 
 #define DEBUG
 
@@ -16,6 +17,10 @@ inline void printfdbg(const char* fmt, ...) {
     pc.write(buf, length + 1);
     va_end(args);
     #endif
+}
+
+inline void printdbg(std::string str) {
+    printfdbg((str + '\n').c_str());
 }
 
 //A safer version of malloc, free

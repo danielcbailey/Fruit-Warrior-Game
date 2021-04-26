@@ -8,6 +8,7 @@
 //#include "screens/gamePlayScreen.hpp"
 #include "graphics/graphicsController.hpp"
 #include "graphics/colors.hpp"
+#include "game/soundManager.hpp"
 #include "globals.hpp"
 
 IntroScreen _introScreen;
@@ -15,6 +16,7 @@ IntroScreen _introScreen;
 void IntroScreen::onCreation() {
     this->left = nullptr;
     this->right = nullptr;
+    _soundManager.addMusic("sounds/titleScreen.wav");
 }
 
 void IntroScreen::onDestruction() {

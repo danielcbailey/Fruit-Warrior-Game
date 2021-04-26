@@ -154,7 +154,10 @@ BUILD\LPC1768\ARMC6\game\screens\titleScreen.o: \
   hardware\dma.h game\fruitManager.hpp game\sprites\sliceable.hpp \
   graphics\sprite.hpp graphics\animationPlayer.hpp \
   graphics\animation.hpp graphics\bitmapImage.hpp graphics\colorLUT.hpp \
-  graphics\tickable.hpp game\sprites\bomb.hpp assets\assets.hpp \
-  graphics\graphicsController.hpp game\screens\gamePlayScreen.hpp \
+  graphics\tickable.hpp game\sprites\bomb.hpp game\guiButton.hpp \
+  game\inputs.hpp inputs\joystickInput.hpp inputs\inputBase.hpp \
+  inputs\inputArbiter.hpp inputs\buttonInput.hpp \
+  graphics\renderedText.hpp graphics\graphicsController.hpp \
+  assets\assets.hpp game\screens\gamePlayScreen.hpp \
   game\sprites\ninja.hpp game\compostManager.hpp game\compostPile.hpp \
-  graphics\renderedText.hpp
+  core\screenManager.hpp game\highscore.hpp util\csv.hpp globals.hpp

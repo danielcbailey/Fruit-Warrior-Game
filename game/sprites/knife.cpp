@@ -5,6 +5,7 @@
 #include "game/inputs.hpp"
 #include "globals.hpp"
 #include <functional>
+#include "game/soundManager.hpp"
 
 Knife::Knife() {
     this->setLayer(99); //99 is the knife layer
@@ -73,6 +74,7 @@ bool Knife::throwKnife(void* evtDetails, float dt) {
         }
         _gamePlayScreen.setComboMultiplier(1);
         this->thrown = true;
+        _soundManager.playSoundEffect("sounds/throw.wav");
         _joystick->detach(this->joyEvtListener);
         this->joyEvtListener = -1;
     }

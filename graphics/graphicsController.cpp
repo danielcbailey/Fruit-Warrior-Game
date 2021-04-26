@@ -171,15 +171,27 @@ void GraphicsController::updateGraphicsElement(GraphicsElement *element) {
     //height of the former ROI
     GraphicsElement::RegionOfInfluence sideRoi;
     GraphicsElement::RegionOfInfluence tbRoi; //tb for top-bottom roi since I can't think of a single word for it
+    bool renderSide = true;
+    bool renderTb = true;
 
     if (roi.x < oldRoi.x) {
         //Moved left
         sideRoi.x = roi.x2 + 1;
         sideRoi.x2 = oldRoi.x2;
-    } else {
+
+        //defaulting y coords to be based on new position
+        sideRoi.y = roi.y;
+        sideRoi.y2 = roi.y2;
+    } else if (roi.x > oldRoi.x) {
         //Moved right
         sideRoi.x2 = roi.x - 1;
         sideRoi.x = oldRoi.x;
+
+        //defaulting y coords to be based on new position
+        sideRoi.y = roi.y;
+        sideRoi.y2 = roi.y2;
+    } else {
+        renderSide = false;
     }
 
     if (roi.y < oldRoi.y) {
@@ -188,20 +200,28 @@ void GraphicsController::updateGraphicsElement(GraphicsElement *element) {
         tbRoi.y2 = oldRoi.y2;
         sideRoi.y = oldRoi.y;
         sideRoi.y2 = roi.y2;
-    } else {
+    } else if (roi.y > oldRoi.y) {
         //Moved down
         tbRoi.y2 = roi.y - 1;
         tbRoi.y = oldRoi.y;
         sideRoi.y = roi.y;
         sideRoi.y2 = oldRoi.y2;
+    } else {
+        //No movement
+        renderTb = false;
     }
 
     tbRoi.x = oldRoi.x;
     tbRoi.x2 = oldRoi.x2;
 
     //The renderAllIn function will check for invalid ROIs
-    renderAllIn(sideRoi);
-    renderAllIn(tbRoi);
+    if (renderSide) {
+        renderAllIn(sideRoi);
+    }
+
+    if (renderTb) {
+        renderAllIn(tbRoi);
+    }
     renderAllAbove(element, false);
     element->setRenderedROI(element->getROI());
 }

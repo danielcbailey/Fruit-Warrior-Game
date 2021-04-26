@@ -151,4 +151,5 @@ BUILD\LPC1768\ARMC6\core\screenManager.o: core\screenManager.cpp \
   mbed-os\platform\include\platform\Stream.h \
   mbed-os\platform\include\platform\FileLike.h graphics\gameTick.hpp \
   game\inputs.hpp inputs\joystickInput.hpp inputs\buttonInput.hpp \
-  globals.hpp
+  globals.hpp game\soundManager.hpp audio\audioPlayer.hpp core\files.hpp \
+  hardware\analogOutAsync.hpp hardware\dma.h

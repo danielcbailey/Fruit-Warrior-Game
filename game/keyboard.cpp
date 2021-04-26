@@ -280,5 +280,8 @@ std::string Keyboard::keyboardInput(std::string startText) {
         _inputArbiter->pollInputs(0.01f); //The delta time isn't used by any inputs the keyboard cares about
     }
 
+    //Filling the space the keyboard used to occupy
+    _globalGraphics->getLCD()->drawRectangleFilled(0, 64, 127, 127, 0x0);
+
     return currentText;
 }

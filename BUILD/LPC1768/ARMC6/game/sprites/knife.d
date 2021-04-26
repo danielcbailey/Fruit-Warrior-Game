@@ -158,4 +158,6 @@ BUILD\LPC1768\ARMC6\game\sprites\knife.o: game\sprites\knife.cpp \
   game\sprites\ninja.hpp game\compostManager.hpp game\compostPile.hpp \
   graphics\renderedText.hpp graphics\graphicsController.hpp \
   game\inputs.hpp inputs\joystickInput.hpp inputs\inputBase.hpp \
-  inputs\inputArbiter.hpp inputs\buttonInput.hpp globals.hpp
+  inputs\inputArbiter.hpp inputs\buttonInput.hpp globals.hpp \
+  game\soundManager.hpp audio\audioPlayer.hpp core\files.hpp \
+  hardware\analogOutAsync.hpp

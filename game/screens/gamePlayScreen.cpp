@@ -12,6 +12,7 @@
 #include "inputs/buttonInput.hpp"
 #include "game/inputs.hpp"
 #include "globals.hpp"
+#include "game/soundManager.hpp"
 
 void GamePlayScreen::onCreation() {
     //Registering the background
@@ -24,7 +25,7 @@ void GamePlayScreen::onCreation() {
     this->compostManager = new CompostManager();
 
     //default fruit spawn interval
-    this->spawnInterval = 5;
+    this->spawnInterval = 3;
     this->score = 0;
 
     this->player = new Ninja();
@@ -33,6 +34,12 @@ void GamePlayScreen::onCreation() {
     this->paused = false;
     this->buttonEvtHandle = _button2->attach(std::bind(&GamePlayScreen::handleButton, this, placeholders::_1, placeholders::_2));
     this->scoreText = new RenderedText("Score: 0", 4, 1);
+
+    _soundManager.clearMusic();
+    _soundManager.addMusic("sounds/gameplay4.wav");
+    _soundManager.addMusic("sounds/gameplay3.wav");
+    _soundManager.addMusic("sounds/gameplay2.wav");
+    _soundManager.addMusic("sounds/gameplay1.wav");
 }
 
 void GamePlayScreen::onDestruction() {
@@ -48,10 +55,7 @@ void GamePlayScreen::onDestruction() {
 }
 
 void GamePlayScreen::onGameLoop(float dt) {
-    if (this->score >= 10) {
-        //the game has been won
-        _screenManager.changeScreen(&_gameWinScreen);
-    }
+    
 }
 
 void GamePlayScreen::redrawStatusBar() {

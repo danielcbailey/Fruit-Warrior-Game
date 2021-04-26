@@ -170,9 +170,8 @@ BUILD\LPC1768\ARMC6\main.o: main.cpp BUILD\LPC1768\ARMC6\mbed_config.h \
   mbed-os\storage\filesystem\fat\ChaN\integer.h \
   mbed-os\storage\filesystem\fat\ChaN\ffconf.h \
   game\screens\titleScreen.hpp game\fruitManager.hpp \
-  game\sprites\sliceable.hpp game\inputs.hpp inputs\joystickInput.hpp \
-  inputs\buttonInput.hpp game\screens\introScreen.hpp \
-  game\screens\gamePlayScreen.hpp game\sprites\ninja.hpp \
-  game\compostManager.hpp game\compostPile.hpp graphics\renderedText.hpp \
-  audio\audioPlayer.hpp core\files.hpp hardware\analogOutAsync.hpp \
-  audio\audioManager.hpp
+  game\sprites\sliceable.hpp game\guiButton.hpp game\inputs.hpp \
+  inputs\joystickInput.hpp inputs\buttonInput.hpp \
+  graphics\renderedText.hpp game\screens\introScreen.hpp \
+  game\highscore.hpp util\csv.hpp audio\audioManager.hpp \
+  audio\audioPlayer.hpp core\files.hpp hardware\analogOutAsync.hpp

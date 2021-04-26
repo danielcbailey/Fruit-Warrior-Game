@@ -157,4 +157,5 @@ BUILD\LPC1768\ARMC6\game\screens\gameOverScreen.o: \
   game\screens\gamePlayScreen.hpp game\fruitManager.hpp \
   game\sprites\sliceable.hpp graphics\sprite.hpp graphics\tickable.hpp \
   game\sprites\bomb.hpp game\sprites\ninja.hpp game\compostManager.hpp \
-  game\compostPile.hpp graphics\renderedText.hpp
+  game\compostPile.hpp graphics\renderedText.hpp game\highscore.hpp \
+  util\csv.hpp game\keyboard.hpp

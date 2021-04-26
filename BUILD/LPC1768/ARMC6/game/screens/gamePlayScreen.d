@@ -160,4 +160,5 @@ BUILD\LPC1768\ARMC6\game\screens\gamePlayScreen.o: \
   game\sprites\knife.hpp game\sprites\knifeTrajectoryMarker.hpp \
   core\screenManager.hpp inputs\inputArbiter.hpp inputs\inputBase.hpp \
   game\screens\gameWinScreen.hpp inputs\buttonInput.hpp game\inputs.hpp \
-  inputs\joystickInput.hpp globals.hpp
+  inputs\joystickInput.hpp globals.hpp game\soundManager.hpp \
+  audio\audioPlayer.hpp core\files.hpp hardware\analogOutAsync.hpp

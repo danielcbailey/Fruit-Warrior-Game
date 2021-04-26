@@ -71,10 +71,12 @@ extern BitmapImage studioLogo_1;
 extern BitmapImage samuraiLogo_0;
 extern BitmapImage samuraiLogo_1;
 extern BitmapImage fruitLogo_0;
+extern BitmapImage highScoreText_0;
 
 //GUI elements
 extern BitmapImage startButton_0;
 extern BitmapImage highScoresButton_0;
+extern BitmapImage backButton_0;
 
 //Animations
 extern Animation bomb_animation;
