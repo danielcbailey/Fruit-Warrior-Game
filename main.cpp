@@ -5,10 +5,9 @@
  * the game engine initialization. All game logic is conducted through the game
  * engine, which is distributed in several dozen files.
  *
- * A bit messy for the demo but whatever
  * Requires joystick and lcd connected to different pins than HW 3 shows.
  *
- * In case you are wondering: currently just the code for the mbed is 3,800+ lines of code
+ * In case you are wondering: currently just the code for the mbed is 6700+ lines of code
  * not including the asset data. The uLCD emulator is an additional 1,068 lines.
  *
  * (c) Daniel Cooper 2021
