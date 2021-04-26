@@ -30,6 +30,8 @@ The game expects the following files to be on the SD card and will not run witho
 * sounds/throw.wav - A PCM sampled WAVE file for the sound effect when the knife is thrown
 * sounds/titleScreen.wav - A PCM sampled WAVE file for the music to play when the title screen is displayed
 
+All WAVE files must be at exactly 22050hz sample rate, mono channel, and 16 bit signed.
+
 Due to copyright restrictions, I cannot provide a prepared SD card folder with the content, it must be prepared independently for your own exclusive consumption.
 
 ### Video Demonstration
